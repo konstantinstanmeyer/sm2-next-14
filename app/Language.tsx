@@ -12,6 +12,8 @@ export default function Language(){
     const [sample, setSample] = useState<undefined | string>(undefined);
 
     useEffect(() => {
+        fetch("../api/mongodb").then(r => r);
+        
         getData(languageId)
         .then(data => {
             console.log(data);
