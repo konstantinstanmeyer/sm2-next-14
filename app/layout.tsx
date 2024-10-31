@@ -2,6 +2,7 @@ import type { Metadata } from "next";
 import "./globals.css";
 import Navbar from "./Navbar";
 import { Pixelify_Sans } from "next/font/google"
+import { NextAuthProvider } from './providers'
 
 export const metadata: Metadata = {
   title: "SM-2 Algorithm",
@@ -21,12 +22,14 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="en">
-      <body
-        className={`${pixelifySans.variable} bg-[#ffdeb9] h-screen overflow-y-hidden`}
-      >
-        <Navbar />
-        {children}
-      </body>
+      <NextAuthProvider>
+        <body
+          className={`${pixelifySans.variable} bg-[#ffdeb9] h-screen overflow-y-hidden`}
+        >
+          <Navbar />
+          {children}
+        </body>
+      </NextAuthProvider>
     </html>
   );
 }
