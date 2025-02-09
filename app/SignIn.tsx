@@ -1,12 +1,16 @@
 "use client"
-import { signIn } from "next-auth/react"
+import { signIn } from "next-auth/react";
 
-export default function SignIn(){
-    return(
-        <button onClick={() => signIn("google")} className="flex flex-row items-center border-black border-r-[1.5px] pr-2" href="/">
+// Client-side SignIn Component
+export default function SignIn({ randomMessage }: { randomMessage: string }) {
+
+    console.log(randomMessage);
+    return (
+        <button onClick={() => signIn("google")} className="flex flex-row items-center border-black border-r-[1.5px] pr-2">
             <img className="ml-2 h-4" src="/gambling.png" />
-            <p className="text-base pixelify ml-2 hidden md:block">Hello</p>
+            {/* Display the random message */}
+            <p className="text-base pixelify ml-2 hidden md:block">{randomMessage}</p>
             <p className="text-base pixelify ml-2 block md:hidden">Sign in</p>
         </button>
-    )
+    );
 }

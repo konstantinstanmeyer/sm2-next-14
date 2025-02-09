@@ -72,9 +72,10 @@ export default function PixelCanvas() {
 
   return (
     <canvas
+      id="drawing-board"
       ref={canvasRef}
-      width={100}
-      height={100}
+      width={200}
+      height={200}
       style={{
         imageRendering: "pixelated",
         border: "1px solid black",

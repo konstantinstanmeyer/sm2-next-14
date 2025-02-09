@@ -1,19 +1,25 @@
-import SignIn from "./SignIn";
+import SignIn from "./SignIn"; // Importing the SignIn component
 
-export default function Navbar({ session }: any){
-    const loginMessage = [
-        "Click 'log in'—and we'll be inseparable!", 
-        "Let’s make it official—log in and I’ll remember you!", 
-        "Log in to save your footsteps in my world!", 
-        "Don’t let your path fade—log in to save it!",
-        "Want me to save your digital breadcrumbs? Just log in!"
-    ]
-    const randomIndex = Math.floor(Math.random() * 5);
+// Server Component for Navbar
 
+async function getData() {
+    const res = await fetch('http://localhost:3000/api/random-message');
+    const data: any = await res.json();
+    return data.randomMessage;
+}
+
+export default async function Navbar({ session }: any) {
+    // Simulate server-side fetching of random message
+    const randomMessage = await getData();
+
+    // Return the Navbar with the session and random message props
     return (
         <div className="bg-[#ffdeb9] w-full fixed top-0 h-6 border-black border-b-[1.5px] flex flex-row">
-            <p>{session.user.name}</p>
-        <SignIn />
-    </div>
-    )
+            {session?.user?.name ? (
+                <p className="ml-2 pixelify">Hello, {session.user.name?.split(" ")[0]}</p>
+            ) : (
+                <SignIn randomMessage={randomMessage} />
+            )}
+        </div>
+    );
 }

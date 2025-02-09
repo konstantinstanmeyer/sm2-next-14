@@ -25,8 +25,6 @@ export default function Language(){
             console.log(data);
             setSample(emptyString => data.text);
         })
-        console.log(sample);
-        console.log("hello");
     }, [languageId])
 
     function getNewSample(){
