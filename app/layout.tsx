@@ -3,6 +3,7 @@ import "./globals.css";
 import Navbar from "./Navbar";
 import { Pixelify_Sans } from "next/font/google"
 import { NextAuthProvider } from './providers'
+import { getServerSession } from "next-auth";
 
 export const metadata: Metadata = {
   title: "SM-2 Algorithm",
@@ -15,18 +16,20 @@ const pixelifySans = Pixelify_Sans({
   variable: '--font-pixelify',
 })
 
-export default function RootLayout({
+export default async function RootLayout({
   children,
 }: Readonly<{
   children: React.ReactNode;
 }>) {
+  const session = await getServerSession();
+
   return (
     <html lang="en">
       <NextAuthProvider>
         <body
           className={`${pixelifySans.variable} bg-[#ffdeb9] h-screen overflow-y-hidden`}
         >
-          <Navbar />
+          <Navbar session={session}/>
           {children}
         </body>
       </NextAuthProvider>

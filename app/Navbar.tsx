@@ -1,6 +1,6 @@
 import SignIn from "./SignIn";
 
-export default function Navbar(){
+export default function Navbar({ session }: any){
     const loginMessage = [
         "Click 'log in'—and we'll be inseparable!", 
         "Let’s make it official—log in and I’ll remember you!", 
@@ -12,6 +12,7 @@ export default function Navbar(){
 
     return (
         <div className="bg-[#ffdeb9] w-full fixed top-0 h-6 border-black border-b-[1.5px] flex flex-row">
+            <p>{session.user.name}</p>
         <SignIn />
     </div>
     )
