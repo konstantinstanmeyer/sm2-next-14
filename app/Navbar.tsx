@@ -3,7 +3,7 @@ import SignIn from "./SignIn"; // Importing the SignIn component
 // Server Component for Navbar
 
 async function getData() {
-    const res = await fetch('../api/random-message');
+    const res = await fetch('/api/random-message');
     const data: any = await res.json();
     return data.randomMessage;
 }
