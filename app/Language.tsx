@@ -1,5 +1,6 @@
 "use client"
 
+import { useSession } from "next-auth/react";
 import { useState, useEffect, useRef } from "react"
 import AddCard from "./AddCard";
 
@@ -13,6 +14,7 @@ export default function Language(){
     const [sample, setSample] = useState<string>("");
     const [isAdding, setIsAdding] = useState<boolean>(false);
     const isFirstRender = useRef(true);
+    const { data: session, status } = useSession();
 
     useEffect(() => {
         if (isFirstRender.current) {
@@ -46,7 +48,7 @@ export default function Language(){
 
     return (
         <div className="flex flex-col items-center transition-all ease-in">
-            {!isAdding ? (
+            {!isAdding && session ? (
                 <>
                 <div className="pixelify mb-2 outline-none mt-[30vh]">
                 <select className="bg-[#ffe8ce] border-black border-[1.5px]" value={languageId} onChange={(e: any) => setLanguageId
@@ -65,9 +67,9 @@ export default function Language(){
                     <button onClick={() => getNewSample()} className='flex justify-center'>
                         <img className="w-5" src="redo.png" />
                     </button>
-                    <button onClick={isAdding => setIsAdding(true)} className="pixelify ml-2">
+                    {status === "authenticated" ? (<button onClick={isAdding => setIsAdding(true)} className="pixelify ml-2">
                         add card
-                    </button>
+                    </button>): null}
                 </div>
                 }
                 </div>
