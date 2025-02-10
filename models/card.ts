@@ -3,9 +3,35 @@ import mongoose, { Schema, models } from "mongoose";
 
 const cardSchema = new Schema<CardModel>(
   {
-    text: {
+    original: {
+      type: String,
+      required: true,
+    },
+    translation: {
         type: String,
-        required: true
+        requried: true,
+    },
+    phonetic: {
+        type: String,
+        required: false,
+    },
+    superMemo: {
+      repitition: {
+          type: Number,
+          required: true,
+      },
+      EF: {
+          type: Number,
+          required: true
+      },
+      interval: {
+          type: Number,
+          required: true,
+      }
+    },
+    image: {
+        required: false,
+        type: String
     }
   },
   { timestamps: true }

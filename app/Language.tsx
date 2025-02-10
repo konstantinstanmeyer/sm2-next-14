@@ -49,7 +49,7 @@ export default function Language(){
             {!isAdding ? (
                 <>
                 <div className="pixelify mb-2 outline-none mt-[30vh]">
-                <select className="bg-[#ffe8ce] border-black border-[1.5px]" onChange={(e: any) => setLanguageId
+                <select className="bg-[#ffe8ce] border-black border-[1.5px]" value={languageId} onChange={(e: any) => setLanguageId
             (e.target.value)}>
                     <option>Indonesian</option>
                     <option>Italian</option>

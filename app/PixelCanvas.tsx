@@ -18,6 +18,9 @@ export default function PixelCanvas() {
     // Clear the canvas before re-drawing
     ctx.clearRect(0, 0, canvas.width, canvas.height);
 
+    ctx.fillStyle = "#ffe8ce";
+    ctx.fillRect(0, 0, canvas.width, canvas.height);
+
     // Draw stored pixels
     Object.entries(pixels).forEach(([key, color]) => {
       const [x, y] = key.split(",").map(Number);
@@ -132,7 +135,7 @@ export default function PixelCanvas() {
   };
 
   return (
-    <div>
+    <div className="flex flex-col items-center">
       <canvas
         id="drawing-board"
         ref={canvasRef}
@@ -149,7 +152,7 @@ export default function PixelCanvas() {
         onMouseLeave={handleMouseUp} // Ensures drawing stops if the cursor leaves
         className="rounded-[10px] bg-[#ffe8ce]"
       />
-      <p onClick={clearCanvas}>clear</p>
+      <p className="cursor-pointer" onClick={clearCanvas}>clear</p>
     </div>
   );
 }

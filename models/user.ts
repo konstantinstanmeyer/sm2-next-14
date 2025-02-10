@@ -1,5 +1,6 @@
 import type { UserModel } from "./types/models";
 import mongoose, { Schema, models } from "mongoose";
+import cardSchema from "./card";
 
 const userSchema = new Schema<UserModel>(
   {
@@ -11,6 +12,10 @@ const userSchema = new Schema<UserModel>(
       type: String,
       required: true,
     },
+    cards: [{
+      language: String,
+      cards: [cardSchema]
+    }]
   },
   { timestamps: true }
 );
