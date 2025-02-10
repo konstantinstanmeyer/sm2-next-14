@@ -31,4 +31,4 @@ export async function GET(request: NextRequest, { params }: { params: { id: stri
         console.error("Error reading file:", error);
         return NextResponse.json({ error: "File not found or could not be read" }, { status: 500 });
     }
-}
+};
