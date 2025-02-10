@@ -1,14 +1,36 @@
 import { NextRequest, NextResponse } from "next/server";
-import { promises as fs } from "fs";
-import path from "path";
+import { getServerSession } from "next-auth";
+import User from "@/models/user";  // Use the updated User model
 import Card from "@/models/card";
 
-export async function POST(request: NextRequest){
-    const { content } = await request.json()
+export async function POST(request: NextRequest) {
+    const session = await getServerSession();
 
-    const card = new Card({ text: content })
-    
+    // Sample card object to be added to the user's cards array
+    const cardEx = {
+    language: "English",
+    original: "Hello",
+    translation: "Hola",
+    };
+
+    const { language, original, translation } = cardEx;
+
+    const email = session?.user?.email;
+    const filter = { email: email };
+
+    const user = await User.findOne(filter);
+    const id = user._id;
+
+    if (!user) {
+    return NextResponse.json({ message: "User not found" }, { status: 404 });
+    }
+
+    const card = new Card({ language: language, original: original, translation: translation, user: id });
+
     const response = await card.save();
 
-    return NextResponse.json({ response }, { status: 200 });
+    user.cards.push(response._id);
+    await user.save();
+
+    return NextResponse.json({ message: "Card saved successfully" }, { status: 200 });
 }

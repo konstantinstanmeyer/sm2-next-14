@@ -27,6 +27,12 @@ export default function AddCard({ language, text, setIsAdding }: Props){
         };
     }
 
+    function testServer(){
+        fetch("../api/language/save-card", {
+            method: "POST"
+        }).then(r =>r.json());
+    }
+
     return (
         <div className="pixelify flex flex-col items-center mt-[20vh] mb-[20vh]">
             <h2 className="text-2xl">Add Card</h2>
@@ -64,6 +70,7 @@ export default function AddCard({ language, text, setIsAdding }: Props){
                 </div>
             </form>
             <p onClick={() => setIsAdding(false)} className="cursor-pointer">cancel</p>
+            <p onClick={() => testServer()}>test</p>
         </div>
     )
 }

@@ -8,31 +8,50 @@ const cardSchema = new Schema<CardModel>(
       required: true,
     },
     translation: {
-        type: String,
-        requried: true,
+      type: String,
+      required: true, 
     },
     phonetic: {
-        type: String,
-        required: false,
+      type: String,
+      required: false,
+    },
+    user: {
+      type: Schema.Types.ObjectId,
+      ref: 'User',
+      required: true
+    },
+    language: {
+      type: String,
+      required: true,
     },
     superMemo: {
-      repitition: {
+      type: {
+        repetitions: {
           type: Number,
           required: true,
-      },
-      EF: {
-          type: Number,
-          required: true
-      },
-      interval: {
+          default: 0,  // Default value for repetitions
+        },
+        EF: {
           type: Number,
           required: true,
-      }
+          default: 2.5,  // Default value for EF
+        },
+        interval: {
+          type: Number,
+          required: true,
+          default: 0,  // Default value for interval
+        },
+      },
+      default: () => ({
+        repetitions: 0,  // Default value for repetitions
+        EF: 2.5,  // Default value for EF
+        interval: 0,  // Default value for interval
+      }),
     },
     image: {
-        required: false,
-        type: String
-    }
+      type: String,
+      required: false,
+    },
   },
   { timestamps: true }
 );

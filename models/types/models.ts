@@ -1,20 +1,22 @@
+import { Schema} from "mongoose";
+
 export interface CardModel {
-    _id: string;
     language: string;
     original: string;
     translation: string;
     phonetic?: string;
     context?: string;
+    user: typeof Schema.Types.ObjectId;
     superMemo: {
-        repititions: number;
-        EF: number;
-        interval: number;
-    },
+      repetitions: number;  // Match here with schema field name
+      EF: number;
+      interval: number;
+    };
     image?: string;
-}
+  }
 
 export interface UserModel {
     email: string;
     name: string;
-    cards: Array<{language: string; cards: Array<CardModel>}>
+    cards:  Array<CardModel>;
 }
