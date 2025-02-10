@@ -1,6 +1,7 @@
 "use client"
 
 import { useState, useEffect, useRef } from "react"
+import AddCard from "./AddCard";
 
 function getData(currentLanguage: string): Promise<any>{
     return fetch("../api/language/" + currentLanguage)
@@ -9,7 +10,8 @@ function getData(currentLanguage: string): Promise<any>{
 
 export default function Language(){
     const [languageId, setLanguageId] = useState("in");
-    const [sample, setSample] = useState<undefined | string>(undefined);
+    const [sample, setSample] = useState<string>("");
+    const [isAdding, setIsAdding] = useState<boolean>(false);
     const isFirstRender = useRef(true);
 
     useEffect(() => {
@@ -44,7 +46,9 @@ export default function Language(){
 
     return (
         <div className="flex flex-col items-center justify-center transition-all ease-in">
-            <div className="pixelify mb-2 outline-none">
+            {!isAdding ? (
+                <>
+                <div className="pixelify mb-2 outline-none">
                 <select className="bg-[#ffe8ce] border-black border-[1.5px]" onChange={(e: any) => setLanguageId
             (e.target.value)}>
                     <option>in</option>
@@ -59,12 +63,17 @@ export default function Language(){
                     <button onClick={() => getNewSample()} className='flex justify-center'>
                         <img className="w-5" src="redo.png" />
                     </button>
-                    <button onClick={() => postSample()} className="pixelify ml-2">
+                    <button onClick={isAdding => setIsAdding(true)} className="pixelify ml-2">
                         add card
                     </button>
                 </div>
                 }
-            </div>
+                </div>
+                </>
+            )
+            : 
+            (<AddCard language={languageId} text={sample} />)
+            }
         </div>
     )
 }
