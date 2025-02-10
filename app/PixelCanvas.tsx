@@ -149,8 +149,8 @@ export default function PixelCanvas() {
         onMouseDown={handleMouseDown}
         onMouseMove={handleMouseMove}
         onMouseUp={handleMouseUp}
-        onMouseLeave={handleMouseUp} // Ensures drawing stops if the cursor leaves
-        className="rounded-[10px] bg-[#ffe8ce]"
+        onMouseLeave={handleMouseUp}
+        className="rounded-[10px] thick-shadow bg-[#ffe8ce]"
       />
       <p className="cursor-pointer" onClick={clearCanvas}>clear</p>
     </div>

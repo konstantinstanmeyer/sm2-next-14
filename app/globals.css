@@ -2,8 +2,22 @@
 @tailwind components;
 @tailwind utilities;
 
+body {
+  background-image: url("/asfalt-dark.png");
+  background-color: #faefe4;
+  background-repeat:repeat;
+}
+
 .pixelify {
   font-family: var(--font-pixelify);
+}
+
+.thick-shadow {
+  box-shadow: rgba(0, 0, 0, 0.4) 0px 2px 4px, rgba(0, 0, 0, 0.3) 0px 7px 13px -3px, rgba(0, 0, 0, 0.2) 0px -3px 0px inset;
+}
+
+.asfalt {
+  background-image: url('/billie-holiday.png');
 }
 
 .card {
@@ -74,3 +88,4 @@ textarea:focus, input:focus, select:focus{
 /* #drawing-board {
   transform: scale(2,2)
 } */
+

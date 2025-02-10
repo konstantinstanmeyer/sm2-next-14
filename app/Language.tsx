@@ -41,8 +41,8 @@ export default function Language(){
         <div className="flex flex-col items-center transition-all ease-in">
             {!isAdding ? (
                 <>
-                <div className="pixelify mb-2 outline-none mt-[30vh]">
-                <select className="bg-[#ffe8ce] border-black border-[1.5px]" value={languageId} onChange={(e: any) => setLanguageId
+                <div className="pixelify mb-2 outline-none">
+                <select className="bg-[white] thick-shadow border-black border-[1.5px]" value={languageId} onChange={(e: any) => setLanguageId
             (e.target.value)}>
                     <option>Indonesian</option>
                     <option>Italian</option>
@@ -51,7 +51,7 @@ export default function Language(){
                     <option>French</option>
                 </select>
             </div>
-            <div className="relative card w-40 h-fit bg-[#ffe8ce] border-black border-[1.5px]">
+            <div className="relative card w-40 thick-shadow h-fit bg-[#ffffff] border-black border-[1.5px]">
                 <p className="pixelify p-4 hyphens-manual break-words">{sample}</p>
                 {!sample ? null : 
                 <div className="absolute bottom-[-30px] w-full flex flex-row items-center justify-center">

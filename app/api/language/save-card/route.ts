@@ -2,11 +2,14 @@ import { NextRequest, NextResponse } from "next/server";
 import { getServerSession } from "next-auth";
 import User from "@/models/user";  // Use the updated User model
 import Card from "@/models/card";
+import mongoDBConnection from "@/lib/mongodb/connection";
 
 export async function POST(request: NextRequest) {
     const session = await getServerSession();
 
     // Sample card object to be added to the user's cards array
+
+    await mongoDBConnection();
 
     const card = await request.json();
 
