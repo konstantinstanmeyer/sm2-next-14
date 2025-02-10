@@ -48,6 +48,24 @@
   border-radius: 10px;
 }
 
+.crossed-out {
+  position: relative;
+  display: inline-block; /* Keeps the effect limited to text width */
+}
+
+.crossed-out::after {
+  content: "";
+  position: absolute;
+  top: 50%; /* Center the line vertically */
+  left: -4px;
+  width: 120%; /* Slightly wider to cover full text */
+  height: 1.5px; /* Thickness of the line */
+  background-color: black; /* Color of the line */
+  transform: rotate(-20deg); /* Creates the diagonal strike-through */
+  transform-origin: center;
+  pointer-events: none; /* Ensures it doesn’t interfere with text selection */
+}
+
 textarea:focus, input:focus, select:focus{
   outline: none;
   box-shadow: none;
