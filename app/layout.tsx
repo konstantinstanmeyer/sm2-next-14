@@ -4,6 +4,7 @@ import Navbar from "./Navbar";
 import { Pixelify_Sans } from "next/font/google"
 import { NextAuthProvider } from './providers'
 import { getServerSession } from "next-auth";
+import Head from "next/head";
 
 export const metadata: Metadata = {
   title: "SM-2 Algorithm",

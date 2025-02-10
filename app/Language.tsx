@@ -21,8 +21,6 @@ export default function Language(){
             isFirstRender.current = false;
             return; // Prevent initial double fetch
         }
-
-        fetch("../api/mongodb").then(r => r);
         
         getData(languageId)
         .then(data => {
@@ -39,16 +37,9 @@ export default function Language(){
         })
     }
 
-    function postSample(){
-        fetch("../api/language/save-card", {
-            method: "POST",
-            body: JSON.stringify({ content: sample })
-        });
-    }
-
     return (
         <div className="flex flex-col items-center transition-all ease-in">
-            {!isAdding && session ? (
+            {!isAdding ? (
                 <>
                 <div className="pixelify mb-2 outline-none mt-[30vh]">
                 <select className="bg-[#ffe8ce] border-black border-[1.5px]" value={languageId} onChange={(e: any) => setLanguageId
@@ -75,8 +66,7 @@ export default function Language(){
                 </div>
                 </>
             )
-            : 
-            (<AddCard setIsAdding={setIsAdding} language={languageId} text={sample} />)
+            : isAdding && session ? (<AddCard setIsAdding={setIsAdding} language={languageId} text={sample} />) : null
             }
         </div>
     )

@@ -38,41 +38,45 @@ export default function AddCard({ language, text, setIsAdding }: Props){
         });
     }
 
-    function testServer(){
-        fetch("../api/language/save-card", {
-            method: "POST",
-            headers: {
-                "Content-Type": "application/json",
-            },
-            body: JSON.stringify({
+    // function testServer(){
+    //     fetch("../api/language/save-card", {
+    //         method: "POST",
+    //         headers: {
+    //             "Content-Type": "application/json",
+    //         },
+    //         body: JSON.stringify({
 
-            })
-        }).then(r =>r.json());
-    }
+    //         })
+    //     }).then(r =>r.json());
+    // }
 
     function handleSubmit(e: FormEvent<HTMLFormElement>){
         e.preventDefault();
 
         const formData = new FormData(e.currentTarget);
 
-        const card: any = {
-            language: languageId,
-            original: formData.get("original"),
-            translation: formData.get("translation"),
-        }
-
-        if(addDrawing){
-            getString().then((drawing) => {
-                card.image = drawing;
+        if((( formData?.get("translation")) as string)?.length >= 1 && (formData?.get("original") as string)?.length >= 1 && languageId){
+            const card: any = {
+                language: languageId,
+                original: formData.get("original"),
+                translation: formData.get("translation"),
+            }
+    
+            if(addDrawing){
+                getString().then((drawing) => {
+                    card.image = drawing;
+                    addPhonetic && ((formData?.get("phonetic")) as string).length >= 1 ? card.phonetic = formData.get("phonetic") : null;
+                    addContext && ((formData?.get("context")) as string).length >= 1 ? card.context = formData.get("context") : null;
+    
+                    postCard(card);
+                })
+            } else {
                 addPhonetic && ((formData?.get("phonetic")) as string).length >= 1 ? card.phonetic = formData.get("phonetic") : null;
                 addContext && ((formData?.get("context")) as string).length >= 1 ? card.context = formData.get("context") : null;
-
                 postCard(card);
-            })
-        } else {
-            addPhonetic && ((formData?.get("phonetic")) as string).length >= 1 ? card.phonetic = formData.get("phonetic") : null;
-            addContext && ((formData?.get("context")) as string).length >= 1 ? card.context = formData.get("context") : null;
-            postCard(card);
+            }
+        } else{
+            console.log("no")
         }
     }
 
@@ -124,7 +128,7 @@ export default function AddCard({ language, text, setIsAdding }: Props){
                 <button type="submit">submit</button>
             </form>
             <p onClick={() => setIsAdding(false)} className="cursor-pointer">cancel</p>
-            <p onClick={() => testServer()}>test</p>
+            {/* <p onClick={() => testServer()}>test</p> */}
         </div>
     )
 }
