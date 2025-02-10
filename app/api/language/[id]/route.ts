@@ -1,29 +1,34 @@
 import { NextRequest, NextResponse } from "next/server";
-import { promises as fs } from "fs";
-import path from "path";
 
 interface Params {
     id: string;
 }
 
-export async function GET(request: NextRequest, { params }: {params: Promise<{ id: string }> }){
-    const { id } = await params;
+export async function GET(request: NextRequest, { params }: { params: { id: string } }) {
+    const { id } = params;
 
-    console.log("hello")
-    console.log(id);
+    console.log("Fetching language file for:", id);
 
-    const publicDirectory = path.join(process.cwd(), 'public');
-    const libraryDirectory = path.join(publicDirectory, `languages/${id}/basic.txt`);
+    // Construct the URL for the static file
+    const fileUrl = `${process.env.NEXT_PUBLIC_SITE_URL || "http://localhost:3000"}/languages/${id}/basic.txt`;
 
-    const text = await fs.readFile(libraryDirectory, 'utf-8');
+    try {
+        // Fetch the file from the public directory as a static asset
+        const response = await fetch(fileUrl);
+        if (!response.ok) throw new Error(`Failed to fetch file: ${response.statusText}`);
 
-    const textBlocks = text.split('\n');
-    
-    let index = Math.floor(Math.random() * textBlocks.length - 1);
-    
-    const result: string = textBlocks[index];
+        const text = await response.text();
+        const textBlocks = text.split("\n");
 
-    console.log(result)
+        // Ensure we don't get an out-of-bounds error
+        let index = Math.floor(Math.random() * textBlocks.length);
+        const result = textBlocks[index]?.trim() || "";
 
-    return NextResponse.json({ text: result}, { status: 200 });
+        console.log("Selected text:", result);
+
+        return NextResponse.json({ text: result }, { status: 200 });
+    } catch (error) {
+        console.error("Error reading file:", error);
+        return NextResponse.json({ error: "File not found or could not be read" }, { status: 500 });
+    }
 }
