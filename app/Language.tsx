@@ -9,7 +9,7 @@ function getData(currentLanguage: string): Promise<any>{
 }
 
 export default function Language(){
-    const [languageId, setLanguageId] = useState("in");
+    const [languageId, setLanguageId] = useState("indonesian");
     const [sample, setSample] = useState<string>("");
     const [isAdding, setIsAdding] = useState<boolean>(false);
     const isFirstRender = useRef(true);
@@ -51,9 +51,9 @@ export default function Language(){
                 <div className="pixelify mb-2 outline-none">
                 <select className="bg-[#ffe8ce] border-black border-[1.5px]" onChange={(e: any) => setLanguageId
             (e.target.value)}>
-                    <option>in</option>
-                    <option>it</option>
-                    <option>es</option>
+                    <option>indonesian</option>
+                    <option>italian</option>
+                    <option>spanish</option>
                 </select>
             </div>
             <div className="relative card w-40 h-fit bg-[#ffe8ce] border-black border-[1.5px]">
@@ -72,7 +72,7 @@ export default function Language(){
                 </>
             )
             : 
-            (<AddCard language={languageId} text={sample} />)
+            (<AddCard setIsAdding={setIsAdding} language={languageId} text={sample} />)
             }
         </div>
     )

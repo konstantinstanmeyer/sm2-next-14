@@ -9,6 +9,9 @@ interface Params {
 export async function GET(request: NextRequest, { params }: {params: Promise<{ id: string }> }){
     const { id } = await params;
 
+    console.log("hello")
+    console.log(id);
+
     const publicDirectory = path.join(process.cwd(), 'public');
     const libraryDirectory = path.join(publicDirectory, `languages/${id}/basic.txt`);
 
