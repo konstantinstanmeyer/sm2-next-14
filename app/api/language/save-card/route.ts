@@ -7,13 +7,8 @@ export async function POST(request: NextRequest) {
     const session = await getServerSession();
 
     // Sample card object to be added to the user's cards array
-    const cardEx = {
-    language: "English",
-    original: "Hello",
-    translation: "Hola",
-    };
 
-    const { language, original, translation } = cardEx;
+    const { language, original, translation } = request.json();
 
     const email = session?.user?.email;
     const filter = { email: email };

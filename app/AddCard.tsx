@@ -1,6 +1,6 @@
 "use client"
 
-import { Dispatch, SetStateAction, useState } from "react";
+import { Dispatch, SetStateAction, useState, FormEvent } from "react";
 import PixelCanvas from "./PixelCanvas";
 
 interface Props {
@@ -29,14 +29,20 @@ export default function AddCard({ language, text, setIsAdding }: Props){
 
     function testServer(){
         fetch("../api/language/save-card", {
-            method: "POST"
+            method: "POST",
         }).then(r =>r.json());
     }
 
+    function handleSubmit(e: FormEvent<HTMLFormElement>){
+        e.preventDefault();
+        const formData = new FormData(e.currentTarget);
+        
+        console.log(formData.get("original"))
+    }
     return (
         <div className="pixelify flex flex-col items-center mt-[20vh] mb-[20vh]">
             <h2 className="text-2xl">Add Card</h2>
-            <form className="my-2 flex flex-col items-center">
+            <form onSubmit={handleSubmit} className="my-2 flex flex-col items-center">
                 <div className="flex flex-row justify-center mt-2">
                     <p className="mr-2">Language:</p>
                     <select className="bg-[#ffe8ce] border-black border-[1.5px] mb-2" value={language} onChange={(e: any) => setLanguageId(e.target.value)}>
@@ -50,11 +56,11 @@ export default function AddCard({ language, text, setIsAdding }: Props){
                 <div className="flex flex-row mt-3">
                     <div className="mx-2">
                         <p>Side #1</p>
-                        <textarea className="h-40 w-60 bg-[#ffe8ce] border-[1px] rounded-[10px] border-black resize-none px-4 mb-2 py-3" onChange={(e) => setOriginalText(e.target.value)} value={originalText} />
+                        <textarea name="original" className="h-40 w-60 bg-[#ffe8ce] border-[1px] rounded-[10px] border-black resize-none px-4 mb-2 py-3" onChange={(e) => setOriginalText(e.target.value)} value={originalText} />
                     </div>
                     <div className="mx-2">
                         <p>Side #2</p>
-                        <textarea className="h-40 w-60 bg-[#ffe8ce] border-[1px] rounded-[10px] border-black resize-none px-4 py-3" />
+                        <textarea name="translation" className="h-40 w-60 bg-[#ffe8ce] border-[1px] rounded-[10px] border-black resize-none px-4 py-3" />
                     </div>
                 </div>
                 <p>add more:</p>
@@ -68,6 +74,7 @@ export default function AddCard({ language, text, setIsAdding }: Props){
                     {addPhonetic && <textarea className="bg-[#ffe8ce] h-[100px] w-[200px] max-h-[200px] px-4 py-3 border-[1px] rounded-[10px] border-black " />}
                     {addContext && <textarea className="bg-[#ffe8ce] h-[100px] w-[200px] max-h-[200px] px-4 py-3 border-[1px] rounded-[10px] border-black " />}
                 </div>
+                <button type="submit">submit</button>
             </form>
             <p onClick={() => setIsAdding(false)} className="cursor-pointer">cancel</p>
             <p onClick={() => testServer()}>test</p>
