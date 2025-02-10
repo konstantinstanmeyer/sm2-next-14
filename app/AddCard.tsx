@@ -16,29 +16,76 @@ export default function AddCard({ language, text, setIsAdding }: Props){
     const [addPhonetic, setAddPhonetic] = useState<boolean>(false);
     const [addContext, setAddContext] = useState<boolean>(false);
 
-    function getString(){
-        const canvas = document.getElementById("drawing-board") as HTMLCanvasElement | null;
-
-        const context = canvas?.getContext("2d") as CanvasRenderingContext2D;
-
-        if(context) {
-            let newImageUrl = context.canvas.toDataURL("image/gif", 50);
-            console.log(newImageUrl);
-        };
+    function getString(): Promise<string> {
+        return new Promise((resolve, reject) => {
+            const canvas = document.getElementById("drawing-board") as HTMLCanvasElement | null;
+            
+            if (!canvas) {
+                reject('Canvas not found');
+                return;
+            }
+    
+            const context = canvas.getContext("2d") as CanvasRenderingContext2D;
+    
+            if (context) {
+                // Delay the canvas data extraction if necessary, like waiting for async operations on canvas rendering
+                const newImageUrl = context.canvas.toDataURL("image/gif", 50);
+                console.log(newImageUrl);
+                resolve(newImageUrl); // Resolve the promise with the image URL
+            } else {
+                reject('Canvas context not available');
+            }
+        });
     }
 
     function testServer(){
         fetch("../api/language/save-card", {
             method: "POST",
+            headers: {
+                "Content-Type": "application/json",
+            },
+            body: JSON.stringify({
+
+            })
         }).then(r =>r.json());
     }
 
     function handleSubmit(e: FormEvent<HTMLFormElement>){
         e.preventDefault();
+
         const formData = new FormData(e.currentTarget);
-        
-        console.log(formData.get("original"))
+
+        const card: any = {
+            language: languageId,
+            original: formData.get("original"),
+            translation: formData.get("translation"),
+        }
+
+        if(addDrawing){
+            getString().then((drawing) => {
+                card.image = drawing;
+                addPhonetic && ((formData?.get("phonetic")) as string).length >= 1 ? card.phonetic = formData.get("phonetic") : null;
+                addContext && ((formData?.get("context")) as string).length >= 1 ? card.context = formData.get("context") : null;
+
+                postCard(card);
+            })
+        } else {
+            addPhonetic && ((formData?.get("phonetic")) as string).length >= 1 ? card.phonetic = formData.get("phonetic") : null;
+            addContext && ((formData?.get("context")) as string).length >= 1 ? card.context = formData.get("context") : null;
+            postCard(card);
+        }
     }
+
+    function postCard(card: any){
+        fetch("../api/language/save-card", {
+            method: "POST",
+            headers: {
+                "Content-Type": "application/json",
+            },
+            body: JSON.stringify(card)
+        }).then(r =>r.json());
+    }
+
     return (
         <div className="pixelify flex flex-col items-center mt-[20vh] mb-[20vh]">
             <h2 className="text-2xl">Add Card</h2>
@@ -71,8 +118,8 @@ export default function AddCard({ language, text, setIsAdding }: Props){
                 </div>
                 <div className="flex flex-row [&>*]:mx-2">
                     {addDrawing && <PixelCanvas/>}
-                    {addPhonetic && <textarea className="bg-[#ffe8ce] h-[100px] w-[200px] max-h-[200px] px-4 py-3 border-[1px] rounded-[10px] border-black " />}
-                    {addContext && <textarea className="bg-[#ffe8ce] h-[100px] w-[200px] max-h-[200px] px-4 py-3 border-[1px] rounded-[10px] border-black " />}
+                    {addPhonetic && <textarea name="phonetic" className="bg-[#ffe8ce] h-[100px] w-[200px] max-h-[200px] px-4 py-3 border-[1px] rounded-[10px] border-black " />}
+                    {addContext && <textarea name="context" className="bg-[#ffe8ce] h-[100px] w-[200px] max-h-[200px] px-4 py-3 border-[1px] rounded-[10px] border-black " />}
                 </div>
                 <button type="submit">submit</button>
             </form>

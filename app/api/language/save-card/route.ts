@@ -8,7 +8,7 @@ export async function POST(request: NextRequest) {
 
     // Sample card object to be added to the user's cards array
 
-    const { language, original, translation } = request.json();
+    const card = await request.json();
 
     const email = session?.user?.email;
     const filter = { email: email };
@@ -20,9 +20,9 @@ export async function POST(request: NextRequest) {
     return NextResponse.json({ message: "User not found" }, { status: 404 });
     }
 
-    const card = new Card({ language: language, original: original, translation: translation, user: id });
+    const newCard = new Card({ language: card.language, original: card.original, translation:card.translation, image:card?.image, context: card?.context, phonetic: card?.phonetic, user: id });
 
-    const response = await card.save();
+    const response = await newCard.save();
 
     user.cards.push(response._id);
     await user.save();
