@@ -27,7 +27,7 @@ export default async function RootLayout({
     <html lang="en">
       <NextAuthProvider>
         <body
-          className={`${pixelifySans.variable} bg-[#ffdeb9] h-screen overflow-y-hidden`}
+          className={`${pixelifySans.variable} bg-[#ffdeb9] h-screen`}
         >
          {await Navbar({session})}
           {children}

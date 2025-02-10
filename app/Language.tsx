@@ -45,15 +45,17 @@ export default function Language(){
     }
 
     return (
-        <div className="flex flex-col items-center justify-center transition-all ease-in">
+        <div className="flex flex-col items-center transition-all ease-in">
             {!isAdding ? (
                 <>
-                <div className="pixelify mb-2 outline-none">
+                <div className="pixelify mb-2 outline-none mt-[30vh]">
                 <select className="bg-[#ffe8ce] border-black border-[1.5px]" onChange={(e: any) => setLanguageId
             (e.target.value)}>
-                    <option>indonesian</option>
-                    <option>italian</option>
-                    <option>spanish</option>
+                    <option>Indonesian</option>
+                    <option>Italian</option>
+                    <option>Spanish</option>
+                    <option>Japanese</option>
+                    <option>French</option>
                 </select>
             </div>
             <div className="relative card w-40 h-fit bg-[#ffe8ce] border-black border-[1.5px]">
