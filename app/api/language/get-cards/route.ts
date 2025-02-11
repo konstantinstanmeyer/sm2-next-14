@@ -1,6 +1,6 @@
 import { NextRequest, NextResponse } from "next/server";
 import { getServerSession } from "next-auth";
-import User from "@/models/user";  // Use the updated User model
+import User from "@/models/user";
 import Card from "@/models/card";
 import mongoDBConnection from "@/lib/mongodb/connection";
 
@@ -20,6 +20,4 @@ export async function GET(request: NextRequest) {
     }
 
     return NextResponse.json({message: "not logged in"}, { status: 404 })
-
-    // Sample card object to be added to the user's cards array
 }
