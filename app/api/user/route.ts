@@ -3,6 +3,7 @@ import User from "@/models/user";
 import { NextRequest, NextResponse } from "next/server";
 
 export async function POST(request: NextRequest) {
+  console.log("oiasoi")
   const { name, email } = await request.json();
   console.log("hello there")
   await mongoDBConnection();

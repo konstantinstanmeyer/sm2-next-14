@@ -18,7 +18,7 @@ export const authConfig = {
                 const userExists = await User.findOne({ email });
       
                 if (!userExists) {
-                  const res = await fetch("../api/user", {
+                  const res = await fetch(`${process.env.NEXT_PUBLIC_SITE_URL || "http://localhost:3000"}/api/user`, {
                     method: "POST",
                     headers: {
                       "Content-Type": "application/json",
