@@ -91,7 +91,7 @@ export default function AddCard({ language, text, setIsAdding }: Props){
     }
 
     return (
-        <div className="pixelify flex flex-col items-center mb-[20vh]">
+        <div className="pixelify flex flex-col items-center mb-[15vh]">
             <h2 className="text-2xl">Add Card</h2>
             <form onSubmit={handleSubmit} className="my-2 flex flex-col items-center">
                 <div className="flex flex-row justify-center mt-2">
