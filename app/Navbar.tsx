@@ -1,4 +1,5 @@
 import SignIn from "./SignIn"; // Importing the SignIn component
+import SignOut from "./SignOut"; // Importing the SignOut component
 
 // Server Component for Navbar
 
@@ -16,7 +17,13 @@ export default async function Navbar({ session }: any) {
     return (
         <div className="bg-[#faefe4] z-10 thick-shadow w-full fixed top-0 h-6 border-black border-b-[1.5px] flex flex-row">
             {session?.user?.name ? (
-                <p className="ml-2 pixelify border-r-[1.5px] border-black pr-2">Hello, {session.user.name?.split(" ")[0]}</p>
+                <>
+                    <p className="ml-2 pixelify border-r-[1.5px] border-black pr-2">Hello, {session.user.name?.split(" ")[0]}</p>
+                    <div className="ml-auto pixelify flex flex-row items-center justify-center">
+                        <a href="/study" className="px-2 border-l-[1.5px] border-black">Study</a>
+                        <SignOut />
+                    </div>
+                </>
             ) : (
                 <SignIn randomMessage={"Hello"} />
             )}
