@@ -27,7 +27,7 @@ export default function Language() {
             } else {
                 enforceLoadingState(sample); // Re-check if sample is still empty
             }
-        }, 1000);
+        }, 900);
     }
 
     useEffect(() => {

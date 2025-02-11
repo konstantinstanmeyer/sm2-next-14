@@ -7,7 +7,9 @@ export default function SignIn({ randomMessage }: { randomMessage: string }) {
     console.log(randomMessage);
     return (
         <button onClick={() => signIn("google")} className="flex flex-row items-center border-black border-r-[1.5px] pr-2">
-            <img className="ml-2 h-4" src="/gambling.png" />
+            <div className="ml-2 h-4 w-4 relative">
+                <img className="h-full" src="/gambling.png" />
+            </div>
             {/* Display the random message */}
             <p className="text-base pixelify ml-2 hidden md:block">{randomMessage}</p>
             <p className="text-base pixelify ml-2 block md:hidden">Sign in</p>

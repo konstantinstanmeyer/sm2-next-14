@@ -7,8 +7,6 @@ import mongoDBConnection from "@/lib/mongodb/connection";
 export async function POST(request: NextRequest) {
     const session = await getServerSession();
 
-    // Sample card object to be added to the user's cards array
-
     await mongoDBConnection();
 
     const card = await request.json();
@@ -19,9 +17,7 @@ export async function POST(request: NextRequest) {
     const user = await User.findOne(filter);
     const id = user._id;
 
-    if (!user) {
-    return NextResponse.json({ message: "User not found" }, { status: 404 });
-    }
+    if (!user) return NextResponse.json({ message: "User not found" }, { status: 404 });
 
     const newCard = new Card({ language: card.language, original: card.original, translation:card.translation, image:card?.image, context: card?.context, phonetic: card?.phonetic, user: id });
 
