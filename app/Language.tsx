@@ -51,7 +51,7 @@ export default function Language(){
                     <option>French</option>
                 </select>
             </div>
-            <div className="relative card w-40 thick-shadow h-fit bg-[#ffffff] border-black border-[1.5px]">
+            <div className="relative card w-40 mb-[20vh] thick-shadow h-fit bg-[#ffffff] border-black border-[1.5px]">
                 <p className="pixelify p-4 hyphens-manual break-words">{sample}</p>
                 {!sample ? null : 
                 <div className="absolute bottom-[-30px] w-full flex flex-row items-center justify-center">
