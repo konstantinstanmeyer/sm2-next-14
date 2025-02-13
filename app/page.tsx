@@ -8,6 +8,7 @@ import Study from "./Study";
 import AddCard from "./AddCard";
 import Error from "./Error";
 import Info from "./Info";
+import Upcoming from "./Upcoming";
 
 export default function Home() {
   const [viewingMode, setViewingMode] = useState<string>("Landing");
@@ -28,9 +29,15 @@ export default function Home() {
           <img className="w-12" src="pencils.png"/>
           Add
         </button>
+        <button onClick={() => setViewingMode("Upcoming")} className="flex flex-col gap-1 text-white text-sm items-center p-2 bg-transparent !shadow-none cursor-pointer">
+          <img className="w-12" src="construction-man.png"/>
+            Upcoming
+        </button>
       </div>
       {viewingMode === "Info" ? 
         <Info setViewingMode={setViewingMode}/> :
+        viewingMode === "Upcoming" ? 
+        <Upcoming setViewingMode={setViewingMode}/> :
         viewingMode === "Landing" && status === "unauthenticated" ? 
         <Landing setViewingMode={setViewingMode} /> :
         viewingMode === "Language" && status === "authenticated" ?
