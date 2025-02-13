@@ -1,8 +1,8 @@
 "use client";
 
-import { useEffect, useRef, useState } from "react";
+import { Dispatch, SetStateAction, useEffect, useRef, useState } from "react";
 
-export default function PixelCanvas() {
+export default function PixelCanvas({ setAddDrawing }: { setAddDrawing: Dispatch<SetStateAction<boolean>> }) {
   const canvasRef = useRef<HTMLCanvasElement>(null);
   const [pixels, setPixels] = useState<Record<string, string>>({});
   const [isDrawing, setIsDrawing] = useState(false);
@@ -178,9 +178,14 @@ export default function PixelCanvas() {
         onMouseUp={handleEnd}
         onMouseLeave={handleEnd}
       />
-      <button className="cursor-pointer absolute -bottom-9" onClick={handleClick}>
-        clear
-      </button>
+      <div className="flex flex-row items-center absolute -bottom-9">
+        <button className="cursor-pointer h-5 mt-[0.37rem] mx-[0.3rem]" onClick={handleClick}>
+          clear
+        </button>
+        <button className="cursor-pointer h-5 mx-[0.3rem]" onClick={() => setAddDrawing(false)}>
+          cancel
+        </button>
+      </div>
     </div>
   );
 }

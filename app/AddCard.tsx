@@ -1,6 +1,6 @@
 "use client"
 
-import { Dispatch, SetStateAction, useState, FormEvent } from "react";
+import { Dispatch, SetStateAction, useState, FormEvent, useRef } from "react";
 import PixelCanvas from "./PixelCanvas";
 
 interface Props {
@@ -14,8 +14,8 @@ export default function AddCard({ language, text, setViewingMode, sessionStatus 
     const [languageId, setLanguageId] = useState<string>(language);
     const [originalText, setOriginalText] =  useState<string>(text);
     const [addDrawing, setAddDrawing] = useState<boolean>(false);
-    const [addPhonetic, setAddPhonetic] = useState<boolean>(false);
-    const [addContext, setAddContext] = useState<boolean>(false);
+    const [loading, setLoading] = useState<boolean>(false);
+    const formRef = useRef<HTMLFormElement>(null);
 
     function getString(): Promise<string> {
         return new Promise((resolve, reject) => {
@@ -66,14 +66,14 @@ export default function AddCard({ language, text, setViewingMode, sessionStatus 
             if(addDrawing){
                 getString().then((drawing) => {
                     card.image = drawing;
-                    addPhonetic && ((formData?.get("phonetic")) as string).length >= 1 ? card.phonetic = formData.get("phonetic") : null;
-                    addContext && ((formData?.get("context")) as string).length >= 1 ? card.context = formData.get("context") : null;
+                    ((formData?.get("phonetic")) as string).length >= 1 ? card.phonetic = formData.get("phonetic") : null;
+                    ((formData?.get("context")) as string).length >= 1 ? card.context = formData.get("context") : null;
     
                     postCard(card);
                 })
             } else {
-                addPhonetic && ((formData?.get("phonetic")) as string).length >= 1 ? card.phonetic = formData.get("phonetic") : null;
-                addContext && ((formData?.get("context")) as string).length >= 1 ? card.context = formData.get("context") : null;
+                ((formData?.get("phonetic")) as string).length >= 1 ? card.phonetic = formData.get("phonetic") : null;
+                ((formData?.get("context")) as string).length >= 1 ? card.context = formData.get("context") : null;
                 postCard(card);
             }
         } else{
@@ -82,13 +82,22 @@ export default function AddCard({ language, text, setViewingMode, sessionStatus 
     }
 
     function postCard(card: any){
+        setLoading(true);
         fetch("../api/language/save-card", {
             method: "POST",
             headers: {
                 "Content-Type": "application/json",
             },
             body: JSON.stringify(card)
-        }).then(r =>r.json());
+        }).then(r => {
+            if(r.ok){
+                setAddDrawing(false);
+                formRef.current?.reset();
+                setLoading(false);
+            } else {
+                setLoading(false);
+            }
+        });
     }
 
     return (
@@ -99,11 +108,11 @@ export default function AddCard({ language, text, setViewingMode, sessionStatus 
                     <button onClick={() => setViewingMode("")} aria-label="Close"></button>
                 </div>
             </div>
-            <form className="mt-2 flex flex-col w-full h-[17.5rem] overflow-y-scroll">
+            <form ref={formRef} onSubmit={handleSubmit} className="mt-2 flex flex-col w-full h-[17.5rem] overflow-y-scroll">
                 <div className="ml-2 mb-2 flex flex-row">
                     <div>
                         <p>Select a Language:</p>
-                        <select className="">
+                        <select value={languageId} onChange={e => setLanguageId(e.target.value)} className="">
                             <option>Indonesian</option>
                             <option>Italian</option>
                             <option>Spanish</option>
@@ -115,67 +124,31 @@ export default function AddCard({ language, text, setViewingMode, sessionStatus 
                 </div>
                 <div className="field-row-stacked mx-2">
                     <label>Original</label>
-                    <input id="original" type="text" />
+                    <input name="original" type="text" />
                 </div>
                 <div className="field-row-stacked mx-2">
                     <label>Translation</label>
-                    <input id="translation" type="text" />
+                    <input name="translation" type="text" />
                 </div>
                 <div className="field-row-stacked mx-2">
                     <label>Phonetic&nbsp;*</label>
-                    <input id="translation" type="text" />
+                    <input name="phonetic" type="text" />
                 </div>
                 <div className="field-row-stacked mx-2">
                     <label>Context&nbsp;*</label>
-                    <input id="translation" type="text" />
+                    <input name="context" type="text" />
                 </div>
                 <div className="field-row-stacked mx-2">
                     <label>Drawing&nbsp;*</label>
-                    <div className="canvas-container mx-auto h-fit mt-4 mb-4">
-                        <PixelCanvas />
-                    </div>
+                    {addDrawing ? 
+                    <div className="canvas-container mx-auto h-fit mt-4 mb-7">
+                        <PixelCanvas setAddDrawing={setAddDrawing} />
+                    </div> :
+                    <button className="w-[5.25rem]" onClick={() => setAddDrawing(true)}>Add Drawing</button>
+                    }
                 </div>
-                <button className="mt-10 mb-6 w-40 mx-auto" type="submit">SUBMIT</button>
+                <button disabled={loading ? true : false} className="mt-6 mb-6 w-40 mx-auto" type="submit">{loading ? "LOADING..." : "SUBMIT"}</button>
             </form>
         </div>
-        // <div className="pixelify flex flex-col items-center mb-[15vh]">
-        //     <h2 className="text-2xl">Add Card</h2>
-        //     <form onSubmit={handleSubmit} className="my-2 flex flex-col items-center">
-        //         <div className="flex flex-row justify-center mt-2">
-        //             <p className="mr-2">Language:</p>
-        //             <select className="bg-[#ffe8ce] thick-shadow border-black border-[1.5px] mb-2" value={language} onChange={(e: any) => setLanguageId(e.target.value)}>
-        //                 <option>Indonesian</option>
-        //                 <option>Italian</option>
-        //                 <option>Spanish</option>
-        //                 <option>Japanese</option>
-        //                 <option>French</option>
-        //             </select>
-        //         </div>
-        //         <div className="flex flex-row mt-3">
-        //             <div className="mx-2">
-        //                 <p>Side #1</p>
-        //                 <textarea name="original" className="h-40 thick-shadow w-60 bg-[#ffe8ce] border-[1px] rounded-[10px] border-black resize-none px-4 mb-2 py-3" onChange={(e) => setOriginalText(e.target.value)} value={originalText} />
-        //             </div>
-        //             <div className="mx-2">
-        //                 <p>Side #2</p>
-        //                 <textarea name="translation" className="h-40 thick-shadow w-60 bg-[#ffe8ce] border-[1px] rounded-[10px] border-black resize-none px-4 py-3" />
-        //             </div>
-        //         </div>
-        //         <p>add more:</p>
-        //         <div className="flex flex-row [&>*]:mx-2">
-        //             <p className={`${addDrawing ? "" : "crossed-out"} cursor-pointer my-2`} onClick={() => setAddDrawing(addDrawing => !addDrawing)}>draw</p>
-        //             <p className={`${addPhonetic ? "" : "crossed-out"} cursor-pointer my-2`} onClick={() => setAddPhonetic(addPhonetic => !addPhonetic)}>phonetic</p>
-        //             <p className={`${addContext ? "" : "crossed-out"} cursor-pointer my-2`} onClick={() => setAddContext(addContext => !addContext)}>context</p>
-        //         </div>
-        //         <div className="flex flex-row [&>*]:mx-2">
-        //             {addDrawing && <PixelCanvas/>}
-        //             {addPhonetic && <textarea name="phonetic" className="bg-[#ffe8ce] thick-shadow h-[100px] w-[200px] max-h-[200px] px-4 py-3 border-[1px] rounded-[10px] border-black " />}
-        //             {addContext && <textarea name="context" className="bg-[#ffe8ce] thick-shadow h-[100px] w-[200px] max-h-[200px] px-4 py-3 border-[1px] rounded-[10px] border-black " />}
-        //         </div>
-        //         <button type="submit">submit</button>
-        //     </form>
-        //     <p onClick={() => setIsAdding(false)} className="cursor-pointer">cancel</p>
-        //     {/* <p onClick={() => testServer()}>test</p> */}
-        // </div>
     )
 }
