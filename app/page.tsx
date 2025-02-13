@@ -32,7 +32,7 @@ export default function Home() {
         viewingMode === "Study" ? 
         (<Study setViewingMode={setViewingMode} />) :
         viewingMode === "Add" ? 
-        <AddCard setViewingMode={setViewingMode} /> :
+        <AddCard language="Indonesian" text="" setViewingMode={setViewingMode} /> :
         null
       }
       {/* <Language /> */}
