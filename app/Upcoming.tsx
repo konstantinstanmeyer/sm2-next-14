@@ -10,7 +10,13 @@ export default function Upcoming({ setViewingMode }: { setViewingMode: Dispatch<
             </div>
             </div>
             <div className="window-body">
-                <p>This is stuff that will be coming soon</p>
+                <p>Some of the incoming changes/updates that will be included with future updates include:</p>
+                <p>- Library of real-world sentences and text, utilizing Mozilla's common language database</p>
+                <p>- Filtering by language</p>
+                <p>- Quiz Support</p>
+                <p>- Further context support (optional fields for specific linguistic use-cases)</p>
+                <p>- Ability to browse other users' cards for a given language</p>
+                <p>- Support for users without accounts to browse certain features (T.B.D.)</p>
             </div>
         </div>
     )

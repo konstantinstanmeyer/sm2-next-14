@@ -30,7 +30,7 @@ export default function Home() {
           Add
         </button>
         <button onClick={() => setViewingMode("Upcoming")} className="flex flex-col gap-1 text-white text-sm items-center p-2 bg-transparent !shadow-none cursor-pointer">
-          <img className="w-12" src="construction-man.png"/>
+          <img className="w-12" src="cardboard.png"/>
             Upcoming
         </button>
       </div>

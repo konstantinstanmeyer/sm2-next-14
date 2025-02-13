@@ -109,10 +109,10 @@ export default function PixelCanvas({ setAddDrawing }: { setAddDrawing: Dispatch
 
     const { x, y } = getPixelCoordinates(e);
 
-    // Ensure interpolation is done from the actual last drawn position
+    // Ensure interpolation is done from the actual last drawn position to account for touchscreen events
     if (lastPosition && (lastPosition.x !== x || lastPosition.y !== y)) {
       drawLine(lastPosition.x, lastPosition.y, x, y);
-      setLastPosition({ x, y }); // ✅ Correctly update lastPosition after each move
+      setLastPosition({ x, y }); // update lastPosition after each move
     }
   };
 
@@ -155,7 +155,7 @@ export default function PixelCanvas({ setAddDrawing }: { setAddDrawing: Dispatch
       canvas.removeEventListener("touchmove", handleMove);
       canvas.removeEventListener("touchend", handleEnd);
     };
-  }, [isDrawing, lastPosition]); // Added lastPosition dependency to ensure updates
+  }, [isDrawing, lastPosition]); // lastPosition dependency to ensure updates
 
   function handleClick(e:any){
     e.preventDefault();

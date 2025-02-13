@@ -12,7 +12,7 @@ export default function Landing({ setViewingMode }: { setViewingMode: Dispatch<S
             </div>
             </div>
             <div className="window-body">
-            <p>There are many ways to begin on this site, if you're lost, try the about section. Visit the study page to begin your learning experience!</p>
+            <p>There are many ways to begin on this site—If you're lost, try the about section. Visit the study page to begin your learning experience!</p>
             </div>
         </div>
     )
