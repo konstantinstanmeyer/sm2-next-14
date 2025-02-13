@@ -19,7 +19,7 @@ export default function Navbar({ session }: any) {
     return (
         <div id="start-bar" className="title-bar-text fixed bottom-0 w-screen mr-0! flex justify-between items-center p-0.5">
             <button className="px-1 py-1 flex text-sm gap-2 items-center justify-center font-[600]">
-                <img src="sm2.png" className="w-16 pb-0.5 h-fit" />
+                <img src="sm2.png" className="w-[4rem] pb-0.5 h-[1.3rem]" />
             </button>
             {session?.user?.name ? (
                 <>

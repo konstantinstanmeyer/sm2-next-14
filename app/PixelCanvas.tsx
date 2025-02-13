@@ -157,6 +157,11 @@ export default function PixelCanvas() {
     };
   }, [isDrawing, lastPosition]); // Added lastPosition dependency to ensure updates
 
+  function handleClick(e:any){
+    e.preventDefault();
+    clearCanvas();
+  }
+
   return (
     <div className="flex flex-col items-center relative">
       <canvas
@@ -173,7 +178,7 @@ export default function PixelCanvas() {
         onMouseUp={handleEnd}
         onMouseLeave={handleEnd}
       />
-      <button className="cursor-pointer absolute -bottom-9" onClick={clearCanvas}>
+      <button className="cursor-pointer absolute -bottom-9" onClick={handleClick}>
         clear
       </button>
     </div>
