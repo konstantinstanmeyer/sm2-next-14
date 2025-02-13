@@ -17,7 +17,7 @@ async function getData() {
     }
 }
 
-export default function Study({ setViewingMode }: { setViewingMode: Dispatch<SetStateAction<string>>}) {
+export default function Study({ setViewingMode, sessionStatus }: { setViewingMode: Dispatch<SetStateAction<string>>, sessionStatus: string}) {
     const [data, setData] = useState<Array<CardModel> | null>(null);
     const [loading, setLoading] = useState(true);
     const [studyMode, setStudyMode] = useState("All Cards");
@@ -105,35 +105,6 @@ export default function Study({ setViewingMode }: { setViewingMode: Dispatch<Set
                     </div>
                 </div> : null}
             </div>
-                {/* {viewingMode === "Selection" ? 
-                (
-                <>
-                    <div onClick={() => setViewingMode("All Cards")} className="relative cursor-pointer card w-40 min-h-20 mx-10 flex justify-center items-center thick-shadow h-fit bg-[#ffffff] border-black border-[1.5px]">
-                        <p>View All Cards</p>
-                    </div>
-                    <div onClick={() => setViewingMode("Sort By Language")} className="relative cursor-pointer card w-40 mb-[20vh] mx-10  min-h-20 flex justify-center items-center thick-shadow h-fit bg-[#ffffff] border-black border-[1.5px]">
-                        <p className="mx-4 text-center">Sort By Language</p>
-                    </div>
-                </>
-                )
-                : viewingMode === "All Cards" ?
-                (
-                <div className="flex flex-col items-center">
-                    <p className="text-2xl">All Cards</p>
-                    <div className="mt-8 flex justify-center flex-wrap mx-[10vw]">
-                        {data && data.map((card, i) => <SmallCard card={card} />)}
-                    </div>
-                </div>
-                )
-                : viewingMode === "Sort By Language" ?
-                (
-                <>
-                    <div>
-
-                    </div>
-                </>
-                ) : null
-                }  */}
         </div>
     );
 }

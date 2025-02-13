@@ -7,9 +7,10 @@ interface Props {
     language: string;
     text: string;
     setViewingMode: Dispatch<SetStateAction<string>>,
+    sessionStatus: string;
 }
 
-export default function AddCard({ language, text, setViewingMode }: Props){
+export default function AddCard({ language, text, setViewingMode, sessionStatus }: Props){
     const [languageId, setLanguageId] = useState<string>(language);
     const [originalText, setOriginalText] =  useState<string>(text);
     const [addDrawing, setAddDrawing] = useState<boolean>(false);
