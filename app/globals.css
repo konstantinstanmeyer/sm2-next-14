@@ -3,9 +3,56 @@
 @tailwind utilities;
 
 body {
-  background-image: url("/asfalt-dark.png");
-  background-color: #faefe4;
-  background-repeat:repeat;
+  background-color: teal;
+}
+
+p {
+  font-family: 'Pixelated MS Sans Serif';
+}
+
+.abs-centered {
+  position: absolute;
+    left: 50%;
+    top: 1rem;
+    transform: translate(-50%, 0);
+
+}
+
+textarea:focus {
+  box-shadow: inset -1px -1px #fff, inset 1px 1px grey, inset -2px -2px #dfdfdf, inset 2px 2px #0a0a0a !important;
+    box-sizing: border-box;
+    resize: none;
+}
+
+.canvas-container {
+  box-shadow: inset -1px -1px #fff, inset 1px 1px grey, inset -2px -2px #dfdfdf, inset 2px 2px #0a0a0a !important;
+  width: 205px;
+  padding-top: 2.5px;
+}
+
+#start-bar {
+  background: silver;
+    bottom: 0;
+    box-shadow: 0 -2px #fffdfc, 0 -4px #cce9eb;
+    display: flex
+;
+    height: 2.5rem;
+    justify-content: space-between;
+    padding: .5rem;
+    position: absolute;
+    width: 100%;
+    z-index: 10;
+}
+
+#start-button {
+  border: none;
+    border-radius: 0;
+    box-sizing: border-box;
+    color: transparent;
+    min-height: 23px;
+    min-width: 75px;
+    padding: 0 12px;
+    text-shadow: 0 0 #222;
 }
 
 .pixelify {

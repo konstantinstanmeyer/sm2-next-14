@@ -26,11 +26,14 @@ export default async function RootLayout({
 
   return (
     <html lang="en">
+      <head>
+        <link rel="stylesheet" href="https://unpkg.com/98.css"></link>
+      </head>
       <NextAuthProvider>
         <body
           className={`${pixelifySans.variable}`}
         >
-         {await Navbar({session})}
+          <Navbar session={session} />
           {children}
         </body>
       </NextAuthProvider>

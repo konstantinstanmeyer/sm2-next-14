@@ -1,3 +1,5 @@
+"use client"
+
 import SignIn from "./SignIn"; // Importing the SignIn component
 import SignOut from "./SignOut"; // Importing the SignOut component
 
@@ -9,23 +11,28 @@ import SignOut from "./SignOut"; // Importing the SignOut component
 //     return data.randomMessage;
 // }
 
-export default async function Navbar({ session }: any) {
+export default function Navbar({ session }: any) {
     // Simulate server-side fetching of random message
     // const randomMessage = await getData();
 
     // Return the Navbar with the session and random message props
     return (
-        <div className="bg-[#faefe4] z-10 thick-shadow w-full fixed top-0 h-6 border-black border-b-[1.5px] flex flex-row">
+        <div id="start-bar" className="title-bar-text fixed bottom-0 w-screen mr-0! flex justify-between items-center p-0.5">
+            <button className="px-1 py-1 flex text-sm gap-2 items-center justify-center font-[600]">
+                <img src="sm2.png" className="w-16 pb-0.5 h-fit" />
+            </button>
             {session?.user?.name ? (
                 <>
-                    <a href="/" className="ml-2 pixelify border-r-[1.5px] border-black pr-2">Hello, {session.user.name?.split(" ")[0]}</a>
-                    <div className="ml-auto pixelify flex flex-row items-center justify-center">
-                        <a href="/study" className="px-2 border-l-[1.5px] border-black">Study</a>
+                    <p className="ml-auto hidden sm:block mr-4 text-black font-normal pl-2">Hello, {session.user.name?.split(" ")[0]}</p>
+                    <div className="flex flex-row items-center justify-center">
+                        {/* <a className="text-black mr-2" href="/study">
+                            <button>Study</button>
+                        </a> */}
                         <SignOut />
                     </div>
                 </>
             ) : (
-                <SignIn randomMessage={"Hello"} />
+                <SignIn />
             )}
         </div>
     );

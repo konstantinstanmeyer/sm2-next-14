@@ -11,31 +11,39 @@ export default function PixelCanvas() {
   useEffect(() => {
     const canvas = canvasRef.current;
     if (!canvas) return;
-
     const ctx = canvas.getContext("2d");
     if (!ctx) return;
 
-    // Clear the canvas before re-drawing
     ctx.clearRect(0, 0, canvas.width, canvas.height);
-
-    ctx.fillStyle = "#ffe8ce";
+    ctx.fillStyle = "#ffffff";
     ctx.fillRect(0, 0, canvas.width, canvas.height);
 
-    // Draw stored pixels
     Object.entries(pixels).forEach(([key, color]) => {
       const [x, y] = key.split(",").map(Number);
       ctx.fillStyle = color;
-      ctx.fillRect(x, y, 5, 5); // Draw 5x5 pixels
+      ctx.fillRect(x, y, 5, 5);
     });
   }, [pixels]);
 
-  const getPixelCoordinates = (e: React.MouseEvent<HTMLCanvasElement>) => {
+  const getPixelCoordinates = (
+    e: React.MouseEvent<HTMLCanvasElement> | TouchEvent
+  ) => {
     const canvas = canvasRef.current;
     if (!canvas) return { x: -1, y: -1 };
 
     const rect = canvas.getBoundingClientRect();
-    const x = Math.floor(e.clientX - rect.left);
-    const y = Math.floor(e.clientY - rect.top);
+    let clientX: number, clientY: number;
+
+    if ("touches" in e) {
+      clientX = e.touches[0].clientX;
+      clientY = e.touches[0].clientY;
+    } else {
+      clientX = e.clientX;
+      clientY = e.clientY;
+    }
+
+    const x = Math.floor(clientX - rect.left);
+    const y = Math.floor(clientY - rect.top);
 
     return { x, y };
   };
@@ -45,79 +53,70 @@ export default function PixelCanvas() {
     if (!canvas) return;
 
     const key = `${x},${y}`;
-    const newColor = `#181818`; // Gray
+    const newColor = "#181818";
 
     setPixels((prev) => {
-      if (prev[key]) return prev; // Avoid unnecessary updates
-
-      const updatedPixels = { ...prev, [key]: newColor };
-
-      // Draw immediately
-      const ctx = canvas.getContext("2d");
-      if (ctx) {
-        ctx.fillStyle = newColor;
-        ctx.fillRect(x - 2, y - 2, 5, 5); // Centered 5x5 pixel block
-      }
-
-      return updatedPixels;
+      if (prev[key]) return prev;
+      return { ...prev, [key]: newColor };
     });
+
+    const ctx = canvas.getContext("2d");
+    if (ctx) {
+      ctx.fillStyle = newColor;
+      ctx.fillRect(x - 2, y - 2, 5, 5);
+    }
   };
 
-  // Function to interpolate and fill gaps
   const drawLine = (x1: number, y1: number, x2: number, y2: number) => {
-    // Calculate the differences in x and y direction
-    const dx = Math.abs(x2 - x1); // Absolute difference in x-coordinates
-    const dy = Math.abs(y2 - y1); // Absolute difference in y-coordinates
-
-    // Determine the direction of movement for x and y
-    const sx = x1 < x2 ? 1 : -1; // Step direction for x (1 if increasing, -1 if decreasing)
-    const sy = y1 < y2 ? 1 : -1; // Step direction for y (1 if increasing, -1 if decreasing)
-
-    // Initialize the error term, which helps decide when to move in the y-direction
+    let dx = Math.abs(x2 - x1);
+    let dy = Math.abs(y2 - y1);
+    let sx = x1 < x2 ? 1 : -1;
+    let sy = y1 < y2 ? 1 : -1;
     let err = dx - dy;
 
-    // Start drawing from the first point
     let x = x1;
     let y = y1;
 
-    // Loop until reaching the target point (x2, y2)
     while (x !== x2 || y !== y2) {
-      drawPixel(x, y); // Draw the pixel at the current (x, y) position
-
-      const e2 = err * 2; // Multiply error by 2 to determine the next step
-
-      if (e2 > -dy) { // If the error is greater than the negative y-difference
-          err -= dy; // Decrease error by dy
-          x += sx; // Move in the x direction
+      drawPixel(x, y);
+      let e2 = err * 2;
+      if (e2 > -dy) {
+        err -= dy;
+        x += sx;
       }
-
-      if (e2 < dx) { // If the error is less than the x-difference
-          err += dx; // Increase error by dx
-          y += sy; // Move in the y direction
+      if (e2 < dx) {
+        err += dx;
+        y += sy;
       }
     }
   };
 
-
-  const handleMouseDown = (e: React.MouseEvent<HTMLCanvasElement>) => {
+  const handleStart = (
+    e: React.MouseEvent<HTMLCanvasElement> | TouchEvent
+  ) => {
+    e.preventDefault();
     setIsDrawing(true);
     const { x, y } = getPixelCoordinates(e);
     setLastPosition({ x, y });
     drawPixel(x, y);
   };
 
-  const handleMouseMove = (e: React.MouseEvent<HTMLCanvasElement>) => {
+  const handleMove = (
+    e: React.MouseEvent<HTMLCanvasElement> | TouchEvent
+  ) => {
     if (!isDrawing) return;
+    e.preventDefault();
+
     const { x, y } = getPixelCoordinates(e);
 
-    if (lastPosition) {
+    // Ensure interpolation is done from the actual last drawn position
+    if (lastPosition && (lastPosition.x !== x || lastPosition.y !== y)) {
       drawLine(lastPosition.x, lastPosition.y, x, y);
+      setLastPosition({ x, y }); // ✅ Correctly update lastPosition after each move
     }
-
-    setLastPosition({ x, y });
   };
 
-  const handleMouseUp = () => {
+  const handleEnd = () => {
     setIsDrawing(false);
     setLastPosition(null);
   };
@@ -128,14 +127,38 @@ export default function PixelCanvas() {
 
     const ctx = canvas.getContext("2d");
     if (ctx) {
-      ctx.clearRect(0, 0, canvas.width, canvas.height); // Clear canvas
+      ctx.clearRect(0, 0, canvas.width, canvas.height);
     }
 
-    setPixels({}); // Reset pixel state
+    setPixels({});
   };
 
+  useEffect(() => {
+    const canvas = canvasRef.current;
+    if (!canvas) return;
+
+    canvas.addEventListener("touchstart", handleStart, { passive: false });
+    canvas.addEventListener("touchmove", handleMove, { passive: false });
+    canvas.addEventListener("touchend", handleEnd);
+    document.addEventListener(
+      "touchmove",
+      (e) => {
+        if (e.target === canvas) {
+          e.preventDefault();
+        }
+      },
+      { passive: false }
+    );
+
+    return () => {
+      canvas.removeEventListener("touchstart", handleStart);
+      canvas.removeEventListener("touchmove", handleMove);
+      canvas.removeEventListener("touchend", handleEnd);
+    };
+  }, [isDrawing, lastPosition]); // Added lastPosition dependency to ensure updates
+
   return (
-    <div className="flex flex-col items-center">
+    <div className="flex flex-col items-center relative">
       <canvas
         id="drawing-board"
         ref={canvasRef}
@@ -143,16 +166,16 @@ export default function PixelCanvas() {
         height={200}
         style={{
           imageRendering: "pixelated",
-          border: "1px solid black",
           cursor: "crosshair",
         }}
-        onMouseDown={handleMouseDown}
-        onMouseMove={handleMouseMove}
-        onMouseUp={handleMouseUp}
-        onMouseLeave={handleMouseUp}
-        className="rounded-[10px] thick-shadow bg-[#ffe8ce]"
+        onMouseDown={handleStart}
+        onMouseMove={handleMove}
+        onMouseUp={handleEnd}
+        onMouseLeave={handleEnd}
       />
-      <p className="cursor-pointer" onClick={clearCanvas}>clear</p>
+      <button className="cursor-pointer absolute -bottom-9" onClick={clearCanvas}>
+        clear
+      </button>
     </div>
   );
 }
