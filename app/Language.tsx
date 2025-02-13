@@ -59,7 +59,7 @@ export default function Language() {
     // }
 
     // return (
-    //     <div className="flex flex-col items-center transition-all ease-in">
+    //     <div className="flex flex-col items-center transition-all ease-in z-10">
     //         {!isAdding ? (
     //             <>
     //                 <div className="pixelify mb-2 outline-none">

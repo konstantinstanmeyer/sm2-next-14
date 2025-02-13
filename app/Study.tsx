@@ -44,7 +44,7 @@ export default function Study({ setViewingMode, sessionStatus }: { setViewingMod
     }
 
     return (
-        <div className="window w-[80vw] relative">
+        <div className="window w-[80vw] relative z-10">
             <p className="">Study</p>
             <div className="title-bar-controls absolute top-1 right-1">
                 <button onClick={() => setViewingMode("")} aria-label="Close"></button>

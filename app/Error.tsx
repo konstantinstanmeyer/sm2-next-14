@@ -4,7 +4,7 @@ import { SetStateAction, Dispatch } from "react"
 
 export default function Error({setViewingMode}: {setViewingMode: Dispatch<SetStateAction<string>>}){
     return (
-        <div className="window w-80">
+        <div className="window w-80 z-10">
             <div className="title-bar">
             <div className="select-none title-bar-text">Error</div>
             <div className="title-bar-controls">

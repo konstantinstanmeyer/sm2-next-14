@@ -101,7 +101,7 @@ export default function AddCard({ language, text, setViewingMode, sessionStatus 
     }
 
     return (
-        <div className="window relative w-80 h-80">
+        <div className="window relative w-80 h-80 z-10">
             <div className="title-bar">
                 <div className="title-bar-text">Add New Card</div>
                 <div className="title-bar-controls">
