@@ -27,7 +27,7 @@ async function getSamples(language: string, sampleLength: string){
 
 export default function Library({ setViewingMode, sessionStatus }: { setViewingMode: Dispatch<SetStateAction<string>>, sessionStatus: string}) {
     const [data, setData] = useState<Array<CardModel>>([]);
-    const [sampleData, setSampleData] = useState<Array<CardModel>>([]);
+    const [sampleData, setSampleData] = useState<Array<string>>([]);
     // const [filteredData, setFilteredData] = useState<Array<CardModel> | null>(null);
     const [loading, setLoading] = useState(true);
     const [studyMode, setStudyMode] = useState("All Cards");
