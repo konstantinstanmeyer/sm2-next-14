@@ -20,6 +20,24 @@ body {
   color: white;
 }
 
+table {
+  width: 100%; /* Ensures table takes full available width */
+  border-collapse: collapse; /* Removes spacing between borders */ /* Ensures columns are equal width and not dictated by content */
+}
+
+@media (max-width: 768px){
+  table {
+    table-layout: fixed;
+  }
+}
+
+th, td {
+  border: 1px solid #ddd;
+  text-align: left;
+  word-wrap: break-word; /* Ensures words wrap inside the cell */
+  white-space: normal; /* Allows text to wrap instead of staying in one line */ /* Breaks long words properly */
+}
+
 p {
   font-family: 'Pixelated MS Sans Serif';
 }

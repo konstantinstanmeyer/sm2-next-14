@@ -128,7 +128,7 @@ export default function Library({ setViewingMode, sessionStatus }: { setViewingM
             <>
                 <div className="absolute top-3 md:top-5 right-5 md:right-auto md:left-36">
                     <div className="flex flex-col md:flex-row md:flex-wrap justify-center items-center">
-                        <p className="md:block hidden mr-0 md:mr-2">Languages:</p>
+                        <p className="md:block hidden mr-0 md:mr-2">Language:</p>
                         <p className="block md:hidden md:text-base text-[0.6rem] md:mb-0 -mb-1 mr-0 md:mr-2">Lang.:</p>
                         <select value={filter} className="md:scale-100 scale-[80%] md:w-fit w-14" onChange={(e: ChangeEvent<HTMLSelectElement>) => handleFilterChange(e.target.value === "All" ? undefined : e.target.value)}>
                             <option>All</option>
@@ -146,14 +146,15 @@ export default function Library({ setViewingMode, sessionStatus }: { setViewingM
                             <table className="interactive w-full relative">
                                 <thead className="relative">
                                 <tr className="relative">
-                                    <th className="">Language</th>
+                                    <th className="w-16">Language</th>
                                     {!loading ? (
                                     <>
-                                        <th className="">Original</th>
-                                        <th className="">Translation</th>
-                                        <th className="">Phonetic</th>
-                                        <th className="">Context</th>
-                                        <th className="">Image</th>
+
+                                        <th className="w-32">Original</th>
+                                        <th className="w-32">Translation</th>
+                                        <th className="w-14">Phonetic</th>
+                                        <th className="w-10">Context</th>
+                                        <th className="w-[4.6rem]">Image</th>
                                     </>
                                     ) :null}
                                 </tr>
@@ -162,12 +163,12 @@ export default function Library({ setViewingMode, sessionStatus }: { setViewingM
                                 {loading ? <LoadingRows /> : 
                                 (filteredData && filteredData.map((card, i) => (
                                     <tr id={"data-row" + i} className="highlight">
-                                        <td className="!w-10">{card.language}</td>
-                                        <td className="!w-10">{card.original.length > 40 ? card.original.slice(0,30) + "..." : card.original}</td>
-                                        <td className="!w-10">{card.translation.length > 40 ? card.translation.slice(0,30) + "..." : card.translation}</td>
-                                        <td className="!w-10">{!card?.phonetic ? "None" : card?.phonetic?.length > 15 ? card.phonetic.slice(0,15) + "..." : card.phonetic}</td>
-                                        <td className="!w-10">{!card?.context ? "None" : card?.context?.length > 15 ? card.context.slice(0,15) + "..." : card.phonetic}</td>
-                                        <td onClick={() => handleImageClick(card?.image)} className="!w-10">{card?.image ? "Click to View" : "None"}</td>
+                                        <td className="">{card.language}</td>
+                                        <td className="">{card.original}</td>
+                                        <td className="">{card.translation}</td>
+                                        <td className="">{!card?.phonetic ? "None" : card?.phonetic}</td>
+                                        <td className="">{!card?.context ? "None" : card?.context}</td>
+                                        <td onClick={() => handleImageClick(card?.image)} className="">{card?.image ? "Click to View" : "None"}</td>
                                     </tr>
                                 )))
                                 }
@@ -242,22 +243,22 @@ export default function Library({ setViewingMode, sessionStatus }: { setViewingM
                     <div className="window-body relative">
                         <div className="sunken-panel h-[200px] w-full relative">
                             <table className="interactive w-full relative">
-                                <thead className="relative">
-                                <tr className="relative">
+                                <thead className="relative w-full">
+                                <tr className="relative w-full">
                                     {!loading ? (
                                     <>
-                                        <th className="">Samples</th>
-                                        {sampleData.length >= 1 ? <th className="">Action</th> : null}
+                                        <th className="!w-5/6">Samples</th>
+                                        {sampleData.length >= 1 ? <th className="!w-20">Action</th> : null}
                                     </>
-                                    ) : <th className="">Samples</th>}
+                                    ) : <th className="!w-1/6">Samples</th>}
                                 </tr>
                                 </thead>
-                                <tbody className="w-10">
+                                <tbody className="">
                                 {loading ? <LoadingRows /> : 
                                 (sampleData.length >= 1 ? sampleData.map((sample, i) => (
                                     <tr id={"sample-row" + i} className="highlight">
-                                        <td className="!w-10">({i + 1}) &nbsp; {sample}</td>
-                                        <td className="!w-10">click to save</td>
+                                        <td className="h-fit">({i + 1}) &nbsp; {sample}</td>
+                                        <td className="h-fit">add</td>
                                     </tr>
                                 )) : <tr id={"sample-row"} className="">
                                 <td className="!w-10">please select a language</td>
