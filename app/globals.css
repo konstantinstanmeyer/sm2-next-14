@@ -20,6 +20,20 @@ body {
   color: white;
 }
 
+@media (max-height: 400px){
+  #icons-container {
+    flex-direction:unset;
+    flex-wrap: wrap;
+    width: 12rem;
+  }
+}
+
+@media (min-height: 401px) {
+  #icons-container {
+    flex-direction: column;
+  }
+}
+
 table {
   width: 100%; /* Ensures table takes full available width */
   border-collapse: collapse; /* Removes spacing between borders */ /* Ensures columns are equal width and not dictated by content */

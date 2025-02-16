@@ -16,7 +16,7 @@ export default function Home() {
 
   return (
     <div className="w-screen flex justify-center items-center relative h-[90vh]">
-      <div className="flex flex-col absolute top-2 left-2">
+      <div id="icons-container" className="flex absolute top-2 left-2">
         <button onClick={() => setViewingMode("Info")} className="flex flex-col gap-1 text-white text-sm items-center p-2 bg-transparent !shadow-none cursor-pointer">
           <img className="w-12" src="bulb.png"/>
           Info
