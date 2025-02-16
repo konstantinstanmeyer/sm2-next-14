@@ -1,7 +1,7 @@
 "use client";
 
 import { CardModel } from "@/models/types/models";
-import { useEffect, useState, Dispatch, SetStateAction } from "react";
+import { useEffect, useState, Dispatch, SetStateAction, ChangeEvent } from "react";
 
 interface Response {
     cards: Array<CardModel>;
@@ -16,8 +16,8 @@ async function getData() {
     }
 }
 
-async function getSamples(language: string){
-    const res = await fetch("../api/language/get-samples/" + language);
+async function getSamples(language: string, sampleLength: number){
+    const res = await fetch("../api/language/get-samples/" + language + "-" + sampleLength);
     if(res.ok){
         return res.json();
     } else {
@@ -34,6 +34,8 @@ export default function Library({ setViewingMode, sessionStatus }: { setViewingM
     const [image,setImage] = useState<string | undefined>(undefined);
     const [filter, setFilter] = useState<undefined | string>(undefined);
     const [sampleFilter, setSampleFilter] = useState<undefined | string>(undefined);
+    const [sampleLength, setSampleLength] = useState<number>(20);
+    const [previousSampleLength, setPreviousSampleLength] = useState<number>(0);
 
     useEffect(() => {
         let isMounted = true;
@@ -53,12 +55,13 @@ export default function Library({ setViewingMode, sessionStatus }: { setViewingM
 
     useEffect(() => {
         if(studyMode === "View Samples" && sampleFilter){
+            if(sampleData.length >= 1 && previousSampleLength === sampleLength){
+                return; // maintain the state if there are already sample to not disrupt UX
+            }
             setSampleData([]);
             setLoading(true);
-            console.log("here")
-            getSamples(sampleFilter)
+            getSamples(sampleFilter, sampleLength)
             .then(res => {
-                console.log(res)
                 setSampleData(res.samples)
                 setLoading(false);
             })
@@ -69,7 +72,6 @@ export default function Library({ setViewingMode, sessionStatus }: { setViewingM
                 if (isMounted) {
                     setData(response.cards);
                     setLoading(false);
-                    console.log(data);
                 }
             });
 
@@ -77,7 +79,7 @@ export default function Library({ setViewingMode, sessionStatus }: { setViewingM
                 isMounted = false; // preventing memory leaks
             };
         }
-    }, [studyMode, sampleFilter])
+    }, [studyMode, sampleFilter, sampleLength])
 
     const filteredData = data.filter(c => filter === undefined || c.language === filter);
 
@@ -103,8 +105,6 @@ export default function Library({ setViewingMode, sessionStatus }: { setViewingM
             }
         }
     }
-
-    console.log(sampleData);
 
     return (
         <div className={`window w-[80vw] relative z-10`}>
@@ -160,7 +160,7 @@ export default function Library({ setViewingMode, sessionStatus }: { setViewingM
                                 <tbody className="w-10">
                                 {loading ? <LoadingRows /> : 
                                 (filteredData && filteredData.map((card, i) => (
-                                    <tr id={"data-row" + i} className="">
+                                    <tr id={"data-row" + i} className="highlight">
                                         <td className="!w-10">{card.language}</td>
                                         <td className="!w-10">{card.original.length > 40 ? card.original.slice(0,30) + "..." : card.original}</td>
                                         <td className="!w-10">{card.translation.length > 40 ? card.translation.slice(0,30) + "..." : card.translation}</td>
@@ -194,10 +194,17 @@ export default function Library({ setViewingMode, sessionStatus }: { setViewingM
                 </div>
             </> : 
             <>
-                 <div className="absolute top-6 left-36">
-                    <div className="flex flex-wrap justify-center items-center">
-                        <p className="mr-2">Languages:</p>
-                        <div className="field-row p-0 mx-2">
+                 <div className="absolute md:top-5 md:left-36 right-4 top-0.5">
+                    <div className="flex md:flex-row flex-col items-center md:items-center">
+                        <p className="mr-2 md:block hidden">Languages:</p>
+                        <select value={sampleFilter} className="md:scale-100 scale-[80%] md:w-fit w-20" onChange={(e: ChangeEvent<HTMLSelectElement>) => setSampleFilter(e.target.value)}>
+                            <option>Spanish</option>
+                            <option>Japanese</option>
+                            <option>Indonesian</option>
+                            <option>Italian</option>
+                            <option>100</option>
+                        </select>
+                        {/* <div className="field-row p-0 mx-2">
                             <input checked={sampleFilter === "Spanish"} onChange={() => handleCheckboxClick("Spanish")} type="checkbox" id="example6"/>
                             <label htmlFor="example6">Spanish</label>
                         </div>
@@ -212,7 +219,15 @@ export default function Library({ setViewingMode, sessionStatus }: { setViewingM
                         <div className="field-row !mt-0 mx-2 p-0">
                             <input checked={sampleFilter === "Italian"} onChange={() => handleCheckboxClick("Italian")} type="checkbox" id="example9"/>
                             <label htmlFor="example9">Italian</label>
-                        </div>
+                        </div> */}
+                        <p className="md:block hidden md:ml-4 ml-0"># of samples:&nbsp; &nbsp;</p>
+                        <select value={sampleLength} className="md:w-auto w-20 md:scale-100 scale-[80%]" onChange={(e: ChangeEvent<HTMLSelectElement>) => setSampleLength(e.target.value)}>
+                            <option>20</option>
+                            <option>40</option>
+                            <option>60</option>
+                            <option>80</option>
+                            <option>100</option>
+                        </select>
                     </div>
                 </div>
                 <div className="window" role="tabpanel">
@@ -232,7 +247,7 @@ export default function Library({ setViewingMode, sessionStatus }: { setViewingM
                                 <tbody className="w-10">
                                 {loading ? <LoadingRows /> : 
                                 (sampleData.length >= 1 ? sampleData.map((sample, i) => (
-                                    <tr id={"sample-row" + i} className="">
+                                    <tr id={"sample-row" + i} className="highlight">
                                         <td className="!w-10">({i + 1}) &nbsp; {sample}</td>
                                         <td className="!w-10">click to save</td>
                                     </tr>
