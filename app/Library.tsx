@@ -34,6 +34,7 @@ export default function Library({ setViewingMode, sessionStatus }: { setViewingM
     const [image,setImage] = useState<string | undefined>(undefined);
     const [filter, setFilter] = useState<undefined | string>(undefined);
     const [sampleFilter, setSampleFilter] = useState<undefined | string>(undefined);
+    const [previousSampleFilter, setPreviousSampleFilter] = useState<undefined | string>(undefined);
     const [sampleLength, setSampleLength] = useState<string>("20");
     const [previousSampleLength, setPreviousSampleLength] = useState<string>("0");
 
@@ -55,9 +56,10 @@ export default function Library({ setViewingMode, sessionStatus }: { setViewingM
 
     useEffect(() => {
         if(studyMode === "View Samples" && sampleFilter){
-            if(sampleData.length >= 1 && previousSampleLength === sampleLength){
+            if(sampleData.length >= 1 && previousSampleLength === sampleLength && previousSampleFilter === sampleFilter){
                 return; // maintain the state if there are already sample to not disrupt UX
             }
+            setPreviousSampleFilter(sampleFilter);
             setPreviousSampleLength(sampleLength);
             setSampleData([]);
             setLoading(true);
@@ -191,7 +193,7 @@ export default function Library({ setViewingMode, sessionStatus }: { setViewingM
                  <div className="absolute top-3 md:top-5 right-5 md:right-auto md:left-36">
                     <div className="flex md:flex-row flex-row items-center md:items-center">
                         <div className="flex items-center justify-center md:flex-row flex-col mr-0 md:mr-4">
-                            <p className="md:block hidden mr-0 md:mr-2">Languages:</p>
+                            <p className="md:block hidden mr-0 md:mr-2">Language:</p>
                             <p className="block md:hidden md:text-base text-[0.6rem] md:mb-0 -mb-1 mr-0 md:mr-2">Lang.</p>
                             <select value={sampleFilter} className="md:scale-100 scale-[80%] w-16  md:w-20" onChange={(e: ChangeEvent<HTMLSelectElement>) => setSampleFilter(e.target.value === "Select" ? undefined : e.target.value)}>
                                 <option>Select</option>
