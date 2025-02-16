@@ -3,7 +3,7 @@ import { NextRequest, NextResponse } from "next/server";
 export async function GET(request: NextRequest, { params }: { params: { information: string } }) {
     const { information } = params;
 
-    console.log(information)
+    // console.log(information)
 
     const [ language, sampleLength ] = information.split("-");
     const sampleNumber = Number(sampleLength);
@@ -31,7 +31,7 @@ export async function GET(request: NextRequest, { params }: { params: { informat
             }
         }
 
-        console.log("Selected texts:", selectedSamples);
+        // console.log("Selected texts:", selectedSamples);
 
         return NextResponse.json({ samples: selectedSamples }, { status: 200 });
     } catch (error) {
