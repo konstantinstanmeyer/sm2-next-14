@@ -58,6 +58,7 @@ export default function Library({ setViewingMode, sessionStatus }: { setViewingM
             if(sampleData.length >= 1 && previousSampleLength === sampleLength){
                 return; // maintain the state if there are already sample to not disrupt UX
             }
+            setPreviousSampleLength(sampleLength);
             setSampleData([]);
             setLoading(true);
             getSamples(sampleFilter, sampleLength)
@@ -87,9 +88,9 @@ export default function Library({ setViewingMode, sessionStatus }: { setViewingM
         if(image) setImage(image);
     }
 
-    function handleCheckboxClick(language: string){
+    function handleFilterChange(language: string | undefined){
         if(studyMode === "All Cards"){
-            if(filter !== language) {
+            if(filter !== language && language !== undefined) {
                 setFilter(language);
             } else {
                 setFilter(undefined);
@@ -118,25 +119,17 @@ export default function Library({ setViewingMode, sessionStatus }: { setViewingM
             </menu>
             {studyMode === "All Cards" ? 
             <>
-                <div className="absolute top-6 left-36">
+                <div className="absolute top-5 left-36">
                     <div className="flex flex-wrap justify-center items-center">
                         <p className="mr-2">Languages:</p>
-                        <div className="field-row p-0 mx-2">
-                            <input checked={filter === "Spanish"} onChange={() => handleCheckboxClick("Spanish")} type="checkbox" id="example2"/>
-                            <label htmlFor="example2">Spanish</label>
-                        </div>
-                        <div className="field-row !mt-0 p-0 mx-2">
-                            <input checked={filter === "Japanese"} onChange={() => handleCheckboxClick("Japanese")} type="checkbox" id="example3"/>
-                            <label htmlFor="example3">Japanese</label>
-                        </div>
-                        <div className="field-row !mt-0 mx-2 p-0">
-                            <input checked={filter === "Indonesian"} onChange={() => handleCheckboxClick("Indonesian")} type="checkbox" id="example4"/>
-                            <label htmlFor="example4">Indonesian</label>
-                        </div>
-                        <div className="field-row !mt-0 mx-2 p-0">
-                            <input checked={filter === "Italian"} onChange={() => handleCheckboxClick("Italian")} type="checkbox" id="example5"/>
-                            <label htmlFor="example5">Italian</label>
-                        </div>
+                        <select value={filter} className="md:scale-100 scale-[80%] md:w-fit w-20" onChange={(e: ChangeEvent<HTMLSelectElement>) => handleFilterChange(e.target.value === "All" ? undefined : e.target.value)}>
+                            <option>All</option>
+                            <option>Spanish</option>
+                            <option>Japanese</option>
+                            <option>Indonesian</option>
+                            <option>Italian</option>
+                            <option>French</option>
+                        </select>
                     </div>
                 </div>
                 <div className="window" role="tabpanel">
@@ -197,12 +190,13 @@ export default function Library({ setViewingMode, sessionStatus }: { setViewingM
                  <div className="absolute md:top-5 md:left-36 right-4 top-0.5">
                     <div className="flex md:flex-row flex-col items-center md:items-center">
                         <p className="mr-2 md:block hidden">Languages:</p>
-                        <select value={sampleFilter} className="md:scale-100 scale-[80%] md:w-fit w-20" onChange={(e: ChangeEvent<HTMLSelectElement>) => setSampleFilter(e.target.value)}>
+                        <select value={sampleFilter} className="md:scale-100 scale-[80%] md:w-fit w-20" onChange={(e: ChangeEvent<HTMLSelectElement>) => setSampleFilter(e.target.value === "Select" ? undefined : e.target.value)}>
+                            <option>Select</option>
                             <option>Spanish</option>
                             <option>Japanese</option>
                             <option>Indonesian</option>
                             <option>Italian</option>
-                            <option>100</option>
+                            <option>French</option>
                         </select>
                         {/* <div className="field-row p-0 mx-2">
                             <input checked={sampleFilter === "Spanish"} onChange={() => handleCheckboxClick("Spanish")} type="checkbox" id="example6"/>
