@@ -119,10 +119,11 @@ export default function Library({ setViewingMode, sessionStatus }: { setViewingM
             </menu>
             {studyMode === "All Cards" ? 
             <>
-                <div className="absolute top-5 left-36">
-                    <div className="flex flex-wrap justify-center items-center">
-                        <p className="mr-2">Languages:</p>
-                        <select value={filter} className="md:scale-100 scale-[80%] md:w-fit w-20" onChange={(e: ChangeEvent<HTMLSelectElement>) => handleFilterChange(e.target.value === "All" ? undefined : e.target.value)}>
+                <div className="absolute top-3 md:top-5 right-5 md:right-auto md:left-36">
+                    <div className="flex flex-col md:flex-row md:flex-wrap justify-center items-center">
+                        <p className="md:block hidden mr-0 md:mr-2">Languages:</p>
+                        <p className="block md:hidden md:text-base text-[0.6rem] md:mb-0 -mb-1 mr-0 md:mr-2">Lang.:</p>
+                        <select value={filter} className="md:scale-100 scale-[80%] md:w-fit w-14" onChange={(e: ChangeEvent<HTMLSelectElement>) => handleFilterChange(e.target.value === "All" ? undefined : e.target.value)}>
                             <option>All</option>
                             <option>Spanish</option>
                             <option>Japanese</option>
@@ -187,17 +188,20 @@ export default function Library({ setViewingMode, sessionStatus }: { setViewingM
                 </div>
             </> : 
             <>
-                 <div className="absolute md:top-5 md:left-36 right-4 top-0.5">
-                    <div className="flex md:flex-row flex-col items-center md:items-center">
-                        <p className="mr-2 md:block hidden">Languages:</p>
-                        <select value={sampleFilter} className="md:scale-100 scale-[80%] md:w-fit w-20" onChange={(e: ChangeEvent<HTMLSelectElement>) => setSampleFilter(e.target.value === "Select" ? undefined : e.target.value)}>
-                            <option>Select</option>
-                            <option>Spanish</option>
-                            <option>Japanese</option>
-                            <option>Indonesian</option>
-                            <option>Italian</option>
-                            <option>French</option>
-                        </select>
+                 <div className="absolute top-3 md:top-5 right-5 md:right-auto md:left-36">
+                    <div className="flex md:flex-row flex-row items-center md:items-center">
+                        <div className="flex items-center justify-center md:flex-row flex-col mr-0 md:mr-4">
+                            <p className="md:block hidden mr-0 md:mr-2">Languages:</p>
+                            <p className="block md:hidden md:text-base text-[0.6rem] md:mb-0 -mb-1 mr-0 md:mr-2">Lang.</p>
+                            <select value={sampleFilter} className="md:scale-100 scale-[80%] w-16  md:w-20" onChange={(e: ChangeEvent<HTMLSelectElement>) => setSampleFilter(e.target.value === "Select" ? undefined : e.target.value)}>
+                                <option>Select</option>
+                                <option>Spanish</option>
+                                <option>Japanese</option>
+                                <option>Indonesian</option>
+                                <option>Italian</option>
+                                <option>French</option>
+                            </select>
+                        </div>
                         {/* <div className="field-row p-0 mx-2">
                             <input checked={sampleFilter === "Spanish"} onChange={() => handleCheckboxClick("Spanish")} type="checkbox" id="example6"/>
                             <label htmlFor="example6">Spanish</label>
@@ -214,14 +218,17 @@ export default function Library({ setViewingMode, sessionStatus }: { setViewingM
                             <input checked={sampleFilter === "Italian"} onChange={() => handleCheckboxClick("Italian")} type="checkbox" id="example9"/>
                             <label htmlFor="example9">Italian</label>
                         </div> */}
-                        <p className="md:block hidden md:ml-4 ml-0"># of samples:&nbsp; &nbsp;</p>
-                        <select value={sampleLength} className="md:w-auto w-20 md:scale-100 scale-[80%]" onChange={(e: ChangeEvent<HTMLSelectElement>) => setSampleLength(e.target.value)}>
-                            <option>20</option>
-                            <option>40</option>
-                            <option>60</option>
-                            <option>80</option>
-                            <option>100</option>
-                        </select>
+                        <div className="flex md:flex-row flex-col justify-center items-center">
+                            <p className="md:block hidden mr-0 md:mr-2"># of samples:&nbsp;</p>
+                            <p className="block md:hidden md:text-base text-[0.6rem] md:mb-0 -mb-1 mr-0 md:mr-2">Amount</p>
+                            <select value={sampleLength} className="md:w-auto w-14 md:scale-100 scale-[80%]" onChange={(e: ChangeEvent<HTMLSelectElement>) => setSampleLength(e.target.value)}>
+                                <option>20</option>
+                                <option>40</option>
+                                <option>60</option>
+                                <option>80</option>
+                                <option>100</option>
+                            </select>
+                        </div>
                     </div>
                 </div>
                 <div className="window" role="tabpanel">
