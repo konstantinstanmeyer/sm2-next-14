@@ -4,7 +4,7 @@ import { useSession } from "next-auth/react";
 import { useState } from "react";
 import Language from "./Language";
 import Landing from "./Landing";
-import Study from "./Study";
+import Library from "./Library";
 import AddCard from "./AddCard";
 import Error from "./Error";
 import Info from "./Info";
@@ -21,9 +21,9 @@ export default function Home() {
           <img className="w-12" src="bulb.png"/>
           Info
         </button>
-        <button onClick={() => setViewingMode("Study")} className="flex flex-col gap-1 text-white text-sm items-center p-2 bg-transparent !shadow-none cursor-pointer">
+        <button onClick={() => setViewingMode("Library")} className="flex flex-col gap-1 text-white text-sm items-center p-2 bg-transparent !shadow-none cursor-pointer">
           <img className="w-12" src="book.png"/>
-          Study
+          Library
         </button>
         <button onClick={() => setViewingMode("Add")} className="flex flex-col gap-1 text-white text-sm items-center p-2 bg-transparent !shadow-none cursor-pointer">
           <img className="w-12" src="pencils.png"/>
@@ -42,8 +42,8 @@ export default function Home() {
         <Landing setViewingMode={setViewingMode} /> :
         viewingMode === "Language" && status === "authenticated" ?
         <Language /> :
-        viewingMode === "Study" && status === "authenticated" ? 
-        <Study sessionStatus={status} setViewingMode={setViewingMode} /> :
+        viewingMode === "Library" && status === "authenticated" ? 
+        <Library sessionStatus={status} setViewingMode={setViewingMode} /> :
         viewingMode === "Add" && status === "authenticated" ? 
         <AddCard sessionStatus={status} language="Indonesian" text="" setViewingMode={setViewingMode} /> :
         viewingMode !== "" && status === "unauthenticated" ? 
