@@ -53,6 +53,8 @@ export default function Library({ setViewingMode, sessionStatus }: { setViewingM
 
     useEffect(() => {
         if(studyMode === "View Samples" && sampleFilter){
+            setSampleData([]);
+            setLoading(true);
             console.log("here")
             getSamples(sampleFilter)
             .then(res => {
@@ -222,19 +224,21 @@ export default function Library({ setViewingMode, sessionStatus }: { setViewingM
                                     {!loading ? (
                                     <>
                                         <th className="">Samples</th>
-                                        <th className="">Action</th>
+                                        {sampleData.length >= 1 ? <th className="">Action</th> : null}
                                     </>
-                                    ) :null}
+                                    ) : <th className="">Samples</th>}
                                 </tr>
                                 </thead>
                                 <tbody className="w-10">
                                 {loading ? <LoadingRows /> : 
-                                (sampleData && sampleData.map((sample, i) => (
+                                (sampleData.length >= 1 ? sampleData.map((sample, i) => (
                                     <tr id={"sample-row" + i} className="">
                                         <td className="!w-10">({i + 1}) &nbsp; {sample}</td>
                                         <td className="!w-10">click to save</td>
                                     </tr>
-                                )))
+                                )) : <tr id={"sample-row"} className="">
+                                <td className="!w-10">please select a language</td>
+                            </tr>)
                                 }
                                 </tbody>
                             </table>
