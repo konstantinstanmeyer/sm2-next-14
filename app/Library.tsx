@@ -17,6 +17,8 @@ async function getData() {
 }
 
 async function getSamples(language: string, sampleLength: string){
+    console.log("hello")
+    console.log(language + "-" + sampleLength )
     const res = await fetch("../api/language/get-samples/" + language + "-" + sampleLength);
     if(res.ok){
         return res.json();
@@ -61,7 +63,7 @@ export default function Library({ setViewingMode, sessionStatus }: { setViewingM
         }
 
         if(studyMode === "View Samples" && sampleFilter){
-            if(sampleData.length >= 1 && previousSampleLength === sampleLength && previousSampleFilter === sampleFilter){
+            if(sampleData?.length >= 1 && previousSampleLength === sampleLength && previousSampleFilter === sampleFilter){
                 return; // maintain the state if there are already sample to not disrupt UX
             }
             setPreviousSampleFilter(sampleFilter);
@@ -161,7 +163,7 @@ export default function Library({ setViewingMode, sessionStatus }: { setViewingM
                                 <tbody className="w-10">
                                 {loading ? <LoadingRows /> : 
                                 (filteredData && filteredData.map((card, i) => (
-                                    <tr id={"data-row" + i} className="highlight">
+                                    <tr key={"data-row" + i} className="highlight">
                                         <td className="">{card.language}</td>
                                         <td className="">{card.original}</td>
                                         <td className="">{card.translation}</td>

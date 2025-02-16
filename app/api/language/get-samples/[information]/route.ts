@@ -3,13 +3,10 @@ import { NextRequest, NextResponse } from "next/server";
 export async function GET(request: NextRequest, { params }: { params: { information: string } }) {
     const { information } = params;
 
-    console.log("")
+    console.log(information)
 
     const [ language, sampleLength ] = information.split("-");
     const sampleNumber = Number(sampleLength);
-
-    console.log("Fetching language file for:", language);
-    console.log("Sample number:", sampleNumber)
 
     // Construct the URL for the static file
     const fileUrl = `${process.env.NEXT_PUBLIC_SITE_URL || "http://localhost:3000"}/languages/${language}/basic.txt`;
