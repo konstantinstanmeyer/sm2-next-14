@@ -149,11 +149,10 @@ export default function Library({ setViewingMode, sessionStatus }: { setViewingM
                                     <th className="w-16">Language</th>
                                     {!loading ? (
                                     <>
-
                                         <th className="w-32">Original</th>
                                         <th className="w-32">Translation</th>
                                         <th className="w-14">Phonetic</th>
-                                        <th className="w-10">Context</th>
+                                        <th className="w-14">Context</th>
                                         <th className="w-[4.6rem]">Image</th>
                                     </>
                                     ) :null}
