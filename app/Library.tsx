@@ -16,7 +16,7 @@ async function getData() {
     }
 }
 
-async function getSamples(language: string, sampleLength: number){
+async function getSamples(language: string, sampleLength: string){
     const res = await fetch("../api/language/get-samples/" + language + "-" + sampleLength);
     if(res.ok){
         return res.json();
