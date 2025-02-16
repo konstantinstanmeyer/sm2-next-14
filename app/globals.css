@@ -2,8 +2,17 @@
 @tailwind components;
 @tailwind utilities;
 
+html {
+  overscroll-behavior: none;
+}
+
+
 body {
   background-color: teal;
+}
+
+* {
+  overscroll-behavior: contain;
 }
 
 .highlight:hover {

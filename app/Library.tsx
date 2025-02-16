@@ -55,6 +55,11 @@ export default function Library({ setViewingMode, sessionStatus }: { setViewingM
     }, []);
 
     useEffect(() => {
+        if(sampleFilter === undefined){
+            setSampleData([]);
+            return;
+        }
+
         if(studyMode === "View Samples" && sampleFilter){
             if(sampleData.length >= 1 && previousSampleLength === sampleLength && previousSampleFilter === sampleFilter){
                 return; // maintain the state if there are already sample to not disrupt UX
