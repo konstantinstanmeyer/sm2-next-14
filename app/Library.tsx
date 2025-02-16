@@ -34,8 +34,8 @@ export default function Library({ setViewingMode, sessionStatus }: { setViewingM
     const [image,setImage] = useState<string | undefined>(undefined);
     const [filter, setFilter] = useState<undefined | string>(undefined);
     const [sampleFilter, setSampleFilter] = useState<undefined | string>(undefined);
-    const [sampleLength, setSampleLength] = useState<number>(20);
-    const [previousSampleLength, setPreviousSampleLength] = useState<number>(0);
+    const [sampleLength, setSampleLength] = useState<string>("20");
+    const [previousSampleLength, setPreviousSampleLength] = useState<string>("0");
 
     useEffect(() => {
         let isMounted = true;
