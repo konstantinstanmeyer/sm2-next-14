@@ -161,7 +161,15 @@ export default function Library({ setViewingMode, sessionStatus }: { setViewingM
                                 </tr>
                                 </thead>
                                 <tbody className="w-10">
-                                {loading ? <LoadingRows /> : 
+                                {loading ? <LoadingRows /> : filteredData && filteredData.length <= 0 ? 
+                                <tr className="highlight">
+                                    <td className="">You have 0 saved cards</td>
+                                    <td className=""></td>
+                                    <td className=""></td>
+                                    <td className=""></td>
+                                    <td className=""></td>
+                                    <td className=""></td>
+                                </tr> :
                                 (filteredData && filteredData.map((card, i) => (
                                     <tr key={"data-row" + i} className="highlight">
                                         <td className="">{card.language}</td>
