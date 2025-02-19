@@ -12,6 +12,8 @@ import Upcoming from "./Upcoming";
 
 export default function Home() {
   const [viewingMode, setViewingMode] = useState<string>("Landing");
+  const [language, setLanguage] = useState<string | undefined>(undefined);
+  const [text, setText] = useState<string>("");
   const { data: session, status } = useSession();
 
   return (
@@ -43,9 +45,9 @@ export default function Home() {
         viewingMode === "Language" && status === "authenticated" ?
         <Language /> :
         viewingMode === "Library" && status === "authenticated" ? 
-        <Library sessionStatus={status} setViewingMode={setViewingMode} /> :
+        <Library setAddLanguage={setLanguage} setAddText={setText} sessionStatus={status} setViewingMode={setViewingMode} /> :
         viewingMode === "Add" && status === "authenticated" ? 
-        <AddCard sessionStatus={status} language="Indonesian" text="" setViewingMode={setViewingMode} /> :
+        <AddCard setAddLanguage={setLanguage} setText={setText} sessionStatus={status} language={language} text={text} setViewingMode={setViewingMode} /> :
         viewingMode !== "" && status === "unauthenticated" ? 
         <Error setViewingMode={setViewingMode} /> : null
       }

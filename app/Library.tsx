@@ -49,7 +49,7 @@ async function getCollectionCards(collectionName: string){
     }
 }
 
-export default function Library({ setViewingMode, sessionStatus }: { setViewingMode: Dispatch<SetStateAction<string>>, sessionStatus: string}) {
+export default function Library({ setViewingMode, sessionStatus, setAddLanguage, setAddText }: { setViewingMode: Dispatch<SetStateAction<string>>, sessionStatus: string, setAddLanguage: Dispatch<SetStateAction<string | undefined>>, setAddText: Dispatch<SetStateAction<string>> }) {
     const [data, setData] = useState<Array<CardModel>>([]);
     const [sampleData, setSampleData] = useState<Array<string>>([]);
     // const [filteredData, setFilteredData] = useState<Array<CardModel> | null>(null);
@@ -172,6 +172,14 @@ export default function Library({ setViewingMode, sessionStatus }: { setViewingM
         }
     }
 
+    function handleAddCard(incomingLanguage: string | undefined, incomingText: string){
+        if(incomingLanguage){
+            setAddLanguage(incomingLanguage);
+            setAddText(incomingText);
+            setViewingMode("Add");
+        }
+    }
+
     return (
         <div className={`window w-[80vw] relative z-10`}>
             <p className="">Library</p>
@@ -280,7 +288,7 @@ export default function Library({ setViewingMode, sessionStatus }: { setViewingM
                         <div className="flex items-center justify-center md:flex-row flex-col mr-0 md:mr-4">
                             <p className="md:block hidden mr-0 md:mr-2">Language:</p>
                             <p className="block md:hidden md:text-base text-[0.6rem] md:mb-0 -mb-1 mr-0 md:mr-2">Lang.</p>
-                            <select value={sampleFilter || "Select"} className="md:scale-100 scale-[80%] w-16  md:w-20" onChange={(e: ChangeEvent<HTMLSelectElement>) => setSampleFilter(e.target.value === "Select" ? undefined : e.target.value)}>
+                            <select value={sampleFilter || "Select"} className="md:scale-100 scale-[80%] w-16  md:w-fit" onChange={(e: ChangeEvent<HTMLSelectElement>) => setSampleFilter(e.target.value === "Select" ? undefined : e.target.value)}>
                                 <option>Select</option>
                                 <option>Spanish</option>
                                 <option>Japanese</option>
@@ -337,7 +345,7 @@ export default function Library({ setViewingMode, sessionStatus }: { setViewingM
                                 (sampleData.length >= 1 ? sampleData.map((sample, i) => (
                                     <tr id={"sample-row" + i} className="highlight">
                                         <td className="h-fit">({i + 1}) &nbsp; {sample}</td>
-                                        <td className="h-fit">add</td>
+                                        <td onClick={() => handleAddCard(sampleFilter, sample)} className="h-fit">add</td>
                                     </tr>
                                 )) : <tr id={"sample-row"} className="">
                                 <td className="!w-10">please select a language</td>

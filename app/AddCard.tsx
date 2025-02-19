@@ -5,10 +5,12 @@ import { Dispatch, SetStateAction, useState, FormEvent, useRef, useEffect, Chang
 import PixelCanvas from "./PixelCanvas";
 
 interface Props {
-    language: string;
+    language: string | undefined;
     text: string;
     setViewingMode: Dispatch<SetStateAction<string>>,
     sessionStatus: string;
+    setText: Dispatch<SetStateAction<string>>,
+    setAddLanguage: Dispatch<SetStateAction<string | undefined>>,
 }
 
 async function getCollections(){
@@ -20,8 +22,8 @@ async function getCollections(){
     }
 }
 
-export default function AddCard({ language, text, setViewingMode, sessionStatus }: Props){
-    const [languageId, setLanguageId] = useState<string>(language);
+export default function AddCard({ language, text, setViewingMode, sessionStatus, setText, setAddLanguage }: Props){
+    const [languageId, setLanguageId] = useState<string | undefined>(language);
     const [originalText, setOriginalText] =  useState<string>(text);
     const [addDrawing, setAddDrawing] = useState<boolean>(false);
     const [incomingCollection, setIncomingCollection] = useState<string | undefined>(undefined);
@@ -150,19 +152,28 @@ export default function AddCard({ language, text, setViewingMode, sessionStatus 
         }
     }
 
+    function handleCloseWindow(e: any){
+        setText("");
+        setLanguageId(undefined);
+        setViewingMode("");
+        setLanguageId(undefined);
+        setAddLanguage(undefined);
+    }
+
     return (
         <div className="window relative w-80 h-80 z-10">
             <div className="title-bar">
                 <div className="title-bar-text">Add New Card</div>
                 <div className="title-bar-controls">
-                    <button onClick={() => setViewingMode("")} aria-label="Close"></button>
+                    <button onClick={(e: any) => handleCloseWindow(e)} aria-label="Close"></button>
                 </div>
             </div>
             <form ref={formRef} onSubmit={handleSubmit} className="mt-2 flex flex-col w-full h-[17.5rem] overflow-y-scroll">
                 <div className="ml-2 mb-2 flex flex-row">
                     <div>
                         <p>Select a Language:</p>
-                        <select value={languageId} onChange={e => setLanguageId(e.target.value)} className="">
+                        <select value={languageId || "Select"} onChange={e => setLanguageId(e.target.value)} className="">
+                            <option>Select</option>
                             <option>Indonesian</option>
                             <option>Italian</option>
                             <option>Spanish</option>
@@ -174,7 +185,7 @@ export default function AddCard({ language, text, setViewingMode, sessionStatus 
                 </div>
                 <div className="field-row-stacked mx-2">
                     <label>Original</label>
-                    <input name="original" type="text" />
+                    <input value={text} onChange={(e: any) => setText(e.target.value)} name="original" type="text" />
                 </div>
                 <div className="field-row-stacked mx-2">
                     <label>Translation</label>
