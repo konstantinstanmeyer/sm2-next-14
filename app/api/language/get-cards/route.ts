@@ -16,6 +16,10 @@ export async function GET(request: NextRequest) {
 
         const cards = await Card.find({ user: user._id });
 
+        const collections = user.collections;
+
+        console.log(collections);
+
         return NextResponse.json({ cards: cards }, { status: 200 });
     }
 

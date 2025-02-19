@@ -1,6 +1,7 @@
 "use client"
 
-import { Dispatch, SetStateAction, useState, FormEvent, useRef } from "react";
+import { CollectionModel } from "@/models/types/models";
+import { Dispatch, SetStateAction, useState, FormEvent, useRef, useEffect, ChangeEvent } from "react";
 import PixelCanvas from "./PixelCanvas";
 
 interface Props {
@@ -10,12 +11,41 @@ interface Props {
     sessionStatus: string;
 }
 
+async function getCollections(){
+    const res = await fetch("../api/user/get-collections");
+    if(res.ok) {
+        return res.json();
+    } else {
+        return "error";
+    }
+}
+
 export default function AddCard({ language, text, setViewingMode, sessionStatus }: Props){
     const [languageId, setLanguageId] = useState<string>(language);
     const [originalText, setOriginalText] =  useState<string>(text);
     const [addDrawing, setAddDrawing] = useState<boolean>(false);
+    const [incomingCollection, setIncomingCollection] = useState<string | undefined>(undefined);
+    const [newCollection, setNewCollection] = useState<boolean>(false);
     const [loading, setLoading] = useState<boolean>(false);
+    const [collectionLoading, setCollectionLoading] = useState<boolean>(true);
+    const [collectionsList, setCollectionsList] = useState<Array<string>>([]);
     const formRef = useRef<HTMLFormElement>(null);
+
+    useEffect(() => {
+        let isMounted = true;
+
+        getCollections().then((response: any) => {
+            if (isMounted) {
+                setCollectionsList(response.collections);
+                setCollectionLoading(false);
+            }
+        });
+
+
+        return () => {
+            isMounted = false; // preventing memory leaks
+        };
+    }, [])
 
     function getString(): Promise<string> {
         return new Promise((resolve, reject) => {
@@ -68,12 +98,15 @@ export default function AddCard({ language, text, setViewingMode, sessionStatus 
                     card.image = drawing;
                     ((formData?.get("phonetic")) as string).length >= 1 ? card.phonetic = formData.get("phonetic") : null;
                     ((formData?.get("context")) as string).length >= 1 ? card.context = formData.get("context") : null;
-    
+                    incomingCollection && incomingCollection?.length >= 1 ? card.collection = incomingCollection : null;
+                    // console.log("addDrawing");
                     postCard(card);
                 })
             } else {
                 ((formData?.get("phonetic")) as string).length >= 1 ? card.phonetic = formData.get("phonetic") : null;
                 ((formData?.get("context")) as string).length >= 1 ? card.context = formData.get("context") : null;
+                incomingCollection && incomingCollection?.length >= 1 ? card.collection = incomingCollection : null;
+                // console.log("iscard not")
                 postCard(card);
             }
         } else{
@@ -98,6 +131,23 @@ export default function AddCard({ language, text, setViewingMode, sessionStatus 
                 setLoading(false);
             }
         });
+    }
+
+    function handleCollectionChange(e: ChangeEvent<HTMLButtonElement>){
+        e.preventDefault();
+        if(incomingCollection === ""){
+            setNewCollection(newCollection => !newCollection)
+            setIncomingCollection(undefined);
+        } else if (incomingCollection === undefined) {
+            setNewCollection(newCollection => !newCollection)
+            setIncomingCollection("");
+        } else if (incomingCollection && newCollection === false){
+            setNewCollection(newCollection =>!newCollection);
+            setIncomingCollection("");
+        } else if(incomingCollection && newCollection === true){
+            setNewCollection(newCollection =>!newCollection);
+            setIncomingCollection(undefined);
+        }
     }
 
     return (
@@ -130,6 +180,24 @@ export default function AddCard({ language, text, setViewingMode, sessionStatus 
                     <label>Translation</label>
                     <input name="translation" type="text" />
                 </div>
+                <div className="field-row-stacked mx-2">
+                    {newCollection ?  
+                        <>
+                            <label>Add to New Collection&nbsp;*</label>
+                            <input value={incomingCollection} onChange={(e:any) => setIncomingCollection(e.target.value)} name="collection" type="text" />
+                        </> :
+                        <>
+                            <label>Add to Existing Collection&nbsp;*</label>
+                            <select value={incomingCollection} onChange={e => setIncomingCollection(e.target.value)} className="">
+                                <option value={undefined}>Select</option>
+                                {collectionLoading ? <option>Loading...</option> : collectionsList.map((col: string, i) => {
+                                    return <option key={i + col}>{col}</option>
+                                })}
+                            </select>
+                        </>
+                    }
+                </div>
+                <button onClick={(e: any) => handleCollectionChange(e)} className="mx-2 mt-3 mb-2">{!newCollection ? "Add to New" : "Add to Existing"}</button>
                 <div className="field-row-stacked mx-2">
                     <label>Phonetic&nbsp;*</label>
                     <input name="phonetic" type="text" />

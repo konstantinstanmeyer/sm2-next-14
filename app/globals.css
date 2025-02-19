@@ -209,6 +209,16 @@ textarea:focus, input:focus, select:focus{
   100%{transform: rotate(.5turn)}
 }
 
+.table-height {
+  height: 200px;
+}
+
+@media (max-height: 400px) {
+  .table-height {
+    height: 100px;
+  }
+}
+
 .loader {
   transform: scale(0.5)
 }
