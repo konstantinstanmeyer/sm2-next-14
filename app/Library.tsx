@@ -380,6 +380,12 @@ function LoadingRows(){
             <tr className="w-full">
                 <td className="w-1/6">Loading...</td>
             </tr>
+            <tr className="w-full">
+                <td className="w-1/6">Loading...</td>
+            </tr>
+            <tr className="w-full">
+                <td className="w-1/6">Loading...</td>
+            </tr>
         </>
     )
 }
