@@ -7,13 +7,19 @@ import { getServerSession } from "next-auth";
 export async function POST(request: NextRequest){
     const { language, collectionName, sandbox } = await request.json();
 
-    console.log(language, collectionName, sandbox)
+    console.log("hello")
+
+    console.log(language, collectionName, sandbox);
     const session = await getServerSession();
     const email = session?.user?.email;
+
+    console.log("hello2")
 
     await mongoDBConnection();
 
     const filter = { email: email };
+
+    console.log("hello3")
 
     // change to let user."...".populate() be dependent on if there is a language or collectionName present
     const user: any = await User.findOne(filter)
@@ -21,15 +27,19 @@ export async function POST(request: NextRequest){
     .populate("collections.cards")
     .lean();
 
+    console.log("hello4")
+
     let cards: any = [];
 
     if(collectionName){
+        console.log("hello5")
         const collection = user.collections.find((col: CollectionModel) => col.name === collectionName);
         if (!collection) {
             return NextResponse.json({ error: "Collection not found" }, { status: 404 });
         }
         cards = collection.cards;
     } else if (language){
+        console.log("hello6")
         cards = user.cards.filter((card: CardModel) => card.language === language);
     }
 
@@ -40,6 +50,7 @@ export async function POST(request: NextRequest){
     const now = new Date();
 
     if(sandbox){
+        console.log("hello7")
         // Fisher-Yates algorithm
         for (let i = cards.length - 1; i > 0; i--) {
             const j = Math.floor(Math.random() * (i + 1));
@@ -48,6 +59,7 @@ export async function POST(request: NextRequest){
 
         return NextResponse.json({ cards: cards }, { status: 200 });
     } else {
+        console.log("hello8")
         const sortedCards = cards
         .filter((card: any) => {
             const nextReviewDate = new Date(card.updatedAt);
@@ -63,7 +75,7 @@ export async function POST(request: NextRequest){
             }
             return new Date(a.updatedAt).getTime() - new Date(b.updatedAt).getTime(); // older last review first
         });
-
+        console.log("hello9")
         return NextResponse.json({ cards: sortedCards}, { status: 200})
     }
 
