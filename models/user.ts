@@ -1,5 +1,6 @@
 import type { UserModel } from "./types/models";
 import mongoose, { Schema, models } from "mongoose";
+import Card from "./card"
 
 const userSchema = new Schema<UserModel>(
   {

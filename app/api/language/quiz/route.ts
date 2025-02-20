@@ -7,6 +7,7 @@ import { getServerSession } from "next-auth";
 
 export async function POST(request: NextRequest){
     const { language, collectionName, sandbox } = await request.json();
+    await mongoDBConnection();
 
     console.log("hello")
 
@@ -15,8 +16,6 @@ export async function POST(request: NextRequest){
     const email = session?.user?.email;
 
     console.log("hello2")
-
-    await mongoDBConnection();
 
     const filter = { email: email };
 
