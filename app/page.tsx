@@ -9,6 +9,7 @@ import AddCard from "./AddCard";
 import Error from "./Error";
 import Info from "./Info";
 import Upcoming from "./Upcoming";
+import Quiz from "./Quiz";
 
 export default function Home() {
   const [viewingMode, setViewingMode] = useState<string>("Landing");
@@ -31,6 +32,14 @@ export default function Home() {
           <img className="w-12" src="pencils.png"/>
           Add
         </button>
+        <button onClick={() => setViewingMode("Quiz")} className="flex flex-col gap-1 text-white text-sm items-center p-2 bg-transparent !shadow-none cursor-pointer">
+          <img className="w-12" src="brain.png"/>
+          Quiz
+        </button>
+        <button onClick={() => setViewingMode("Settings")} className="flex flex-col gap-1 text-white text-sm items-center p-2 bg-transparent !shadow-none cursor-pointer">
+          <img className="w-12" src="settings.png"/>
+            Settings
+        </button>
         <button onClick={() => setViewingMode("Upcoming")} className="flex flex-col gap-1 text-white text-sm items-center p-2 bg-transparent !shadow-none cursor-pointer">
           <img className="w-12" src="cardboard.png"/>
             Upcoming
@@ -48,6 +57,8 @@ export default function Home() {
         <Library setAddLanguage={setLanguage} setAddText={setText} sessionStatus={status} setViewingMode={setViewingMode} /> :
         viewingMode === "Add" && status === "authenticated" ? 
         <AddCard setAddLanguage={setLanguage} setText={setText} sessionStatus={status} language={language} text={text} setViewingMode={setViewingMode} /> :
+        viewingMode === "Quiz" && status === "authenticated" ? 
+        <Quiz setViewingMode={setViewingMode} /> :
         viewingMode !== "" && status === "unauthenticated" ? 
         <Error setViewingMode={setViewingMode} /> : null
       }

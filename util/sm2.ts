@@ -16,10 +16,10 @@ const sm2 = ({card, userGrade }: SM2Inputs) => {
     if (userGrade >= 3){
         switch (repetitions){
             case 0:
-                interval = 0.07; // fraction for 10min in a day
+                interval = 1; // fraction for 10min in a day
                 break;
             case 1:
-                interval = 0.1; // slightly more time between testing if already correct once before
+                interval = 6; // slightly more time between testing if already correct once before
                 break;
             default:
                 interval = precise(interval * EF); // implemented for exponential growth if correct >= 2 times in a row
@@ -28,7 +28,7 @@ const sm2 = ({card, userGrade }: SM2Inputs) => {
         repetitions++;
     } else {
         repetitions = 0;
-        interval = 0.003; // fraction for 5min in a day
+        interval = 1; // fraction for 5min in a day
     }
 
     EF = EF + (0.1 - (5 - userGrade) * (0.08 + (5 - userGrade) * 0.02));

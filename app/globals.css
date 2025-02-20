@@ -20,7 +20,7 @@ body {
   color: white;
 }
 
-@media (max-height: 400px){
+@media (max-height: 580px){
   #icons-container {
     flex-direction:unset;
     flex-wrap: wrap;
@@ -28,7 +28,19 @@ body {
   }
 }
 
-@media (min-height: 401px) {
+@media (max-height: 324px){
+  #icons-container {
+    width: 18rem;
+  }
+}
+
+@media (min-height: 581px) {
+  #icons-container {
+    flex-direction: column;
+  }
+}
+
+@media (min-height: 581px) {
   #icons-container {
     flex-direction: column;
   }
