@@ -1,6 +1,7 @@
 import mongoDBConnection from "@/lib/mongodb/connection";
 import { NextRequest, NextResponse } from "next/server";
 import User from "@/models/user";
+import Card from "@/models/card"
 import { CollectionModel, CardModel } from "@/models/types/models";
 import { getServerSession } from "next-auth";
 
