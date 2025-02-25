@@ -10,7 +10,7 @@ interface SM2Inputs {
     userGrade: number;
 }
 
-const sm2 = ({card, userGrade }: SM2Inputs) => {
+const sm2 = (card: CardModel, userGrade: number) => {
     let { EF, repetitions, interval } = card.superMemo;
 
     if (userGrade >= 3){

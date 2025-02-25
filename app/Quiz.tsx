@@ -41,6 +41,7 @@ export default function Quiz({ setViewingMode }: Props){
     const [sandbox, setSandbox] = useState<boolean>(false);
     const [cards, setCards] = useState<Array<any>>([]);
     const [cardIndex, setCardIndex] = useState<number>(0);
+    const [error, setError] = useState<string | undefined>(undefined);
 
     useEffect(() => {
         let isMounted = true;
@@ -63,10 +64,33 @@ export default function Quiz({ setViewingMode }: Props){
         setLoading(true);
         getQuizCards({ language: language, collectionName: language ? undefined : collectionName, sandbox: sandbox })
         .then(res => {
-            console.log(res);
-            setCards(res.cards);
+            if(res?.cards?.length >= 1){
+                setCards(res.cards);
+            } else {
+                setError("No cards found");
+            }
             setLoading(false);
-        })
+        });
+    }
+
+    function handleEval(cardId: string, score: number){
+        if(sandbox){
+            return
+        } else {
+            // setLoading(true);
+            fetch("../api/language/quiz/update-card", {
+                method: "POST",
+                headers: {
+                    "Content-Type": "application/json",
+                },
+                body: JSON.stringify({ cardId: cardId, score: score})
+            })
+            .then(res => res.json())
+            .then(data => {
+                console.log(data);
+                setLoading(false)
+            })
+        }
     }
 
     return(
@@ -80,11 +104,18 @@ export default function Quiz({ setViewingMode }: Props){
             {cards.length > 0 ? 
             <> 
                 <button onClick={() => {setCards([]); setCardIndex(0)}}>Cancel</button>
-                <div className="">
+                <div className="w-full relative">
                     <p>Original</p>
                     <p>{cards[cardIndex].original}</p>
                     <p>Translation</p>
                     <p>{cards[cardIndex].translation}</p>
+                    {sandbox ? null : <div className="flex flex-row w-full items-center justify-center">
+                        <button onClick={() => handleEval(cards[cardIndex]._id, 1)} className="!w-10">1</button>
+                        <button onClick={() => handleEval(cards[cardIndex]._id, 2)} className="!w-10">2</button>
+                        <button onClick={() => handleEval(cards[cardIndex]._id, 3)} className="!w-10">3</button>
+                        <button onClick={() => handleEval(cards[cardIndex]._id, 4)} className="!w-10">4</button>
+                        <button onClick={() => handleEval(cards[cardIndex]._id, 5)} className="!w-10">5</button>
+                    </div>}
                     <button onClick={() => setCardIndex(cardIndex - 1)} disabled={cardIndex === 0}>Back</button>
                     <button onClick={() => setCardIndex(cardIndex + 1)} disabled={cardIndex === cards.length - 1}>Next</button>
                 </div>
@@ -128,12 +159,13 @@ export default function Quiz({ setViewingMode }: Props){
                     }
                     {collectionName && !allCollections || language ? 
                     <>
-                        <input onClick={() => setSandbox(sandbox => !sandbox)} className="" type="checkbox" id="set-sandbox"></input>
+                        <input onChange={() => setSandbox(sandbox => !sandbox)} checked={sandbox} className="" type="checkbox" id="set-sandbox"></input>
                         <label className="mt-2" htmlFor="set-sandbox">Sandbox Mode</label>
                     </> : null}
                     {collectionName && !allCollections || language ?
                     <button onClick={() => handleStartQuiz()} className="mt-3">Start</button>:null
                     }
+                    {error ? <p>{error}</p> : null}
                 </div>
             </>
             }
