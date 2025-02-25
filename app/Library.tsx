@@ -228,7 +228,8 @@ export default function Library({ setViewingMode, sessionStatus, setAddLanguage,
                             <table className="interactive w-full relative">
                                 <thead className="relative">
                                 <tr className="relative">
-                                    <th className="w-1/6">Language</th>
+                                    <th className="hidden md:table-cell w-1/6">Language</th>
+                                    <th className="md:hidden table-cell w-1/6">Lang.</th>
                                     {!loading ? (
                                     <>
                                         <th className="w-2/6">Original</th>
