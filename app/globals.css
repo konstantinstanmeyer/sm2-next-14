@@ -71,7 +71,7 @@ p {
 .abs-centered {
   position: absolute;
     left: 50%;
-    top: 1rem;
+    top: 0%;
     transform: translate(-50%, 0);
 
 }
@@ -237,4 +237,10 @@ textarea:focus, input:focus, select:focus{
 
 .loading {
   color: rgb(0,0,0,0.0001);
+}
+
+.grade-buttons button {
+  padding: 0 !important;
+  margin: 0 !important;
+  min-width: 40px !important;
 }

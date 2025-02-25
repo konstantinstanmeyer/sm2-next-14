@@ -2,6 +2,7 @@
 
 import { CardModel } from "@/models/types/models";
 import { useEffect, useState, Dispatch, SetStateAction, ChangeEvent } from "react";
+import TableRow from "./TableRow";
 
 interface Response {
     cards: Array<CardModel>;
@@ -64,6 +65,7 @@ export default function Library({ setViewingMode, sessionStatus, setAddLanguage,
     const [sampleLength, setSampleLength] = useState<string>("20");
     const [previousSampleLength, setPreviousSampleLength] = useState<string>("0");
     const [collectionsList, setCollectionsList] = useState<Array<string>>([]);
+    const [viewCard, setViewCard] = useState<any>({});
 
     useEffect(() => {
         let isMounted = true;
@@ -199,7 +201,7 @@ export default function Library({ setViewingMode, sessionStatus, setAddLanguage,
                         <div className="flex items-center justify-center md:flex-row flex-col mr-0 md:mr-4">  
                             <p className="md:block hidden mr-0 md:mr-2">Language:</p>
                             <p className="block md:hidden md:text-base text-[0.6rem] md:mb-0 -mb-1 mr-0 md:mr-2">Lang.:</p>
-                            <select value={filter} className="md:scale-100 scale-[80%] md:w-fit w-14" onChange={(e: ChangeEvent<HTMLSelectElement>) => handleFilterChange(e.target.value === "All" ? undefined : e.target.value)}>
+                            <select value={filter} className="md:scale-100 scale-[80%] md:w-fit w-16" onChange={(e: ChangeEvent<HTMLSelectElement>) => handleFilterChange(e.target.value === "All" ? undefined : e.target.value)}>
                                 <option>All</option>
                                 <option>Spanish</option>
                                 <option>Japanese</option>
@@ -226,14 +228,15 @@ export default function Library({ setViewingMode, sessionStatus, setAddLanguage,
                             <table className="interactive w-full relative">
                                 <thead className="relative">
                                 <tr className="relative">
-                                    <th className="w-16">Language</th>
+                                    <th className="w-1/6">Language</th>
                                     {!loading ? (
                                     <>
-                                        <th className="w-32">Original</th>
-                                        <th className="w-32">Translation</th>
-                                        <th className="w-14">Phonetic</th>
+                                        <th className="w-2/6">Original</th>
+                                        <th className="w-2/6">Translation</th>
+                                        <th className="w-1/6">All Info</th>
+                                        {/* <th className="w-14">Phonetic</th>
                                         <th className="w-14">Context</th>
-                                        <th className="w-[4.6rem]">Image</th>
+                                        <th className="w-[4.6rem]">Image</th> */}
                                     </>
                                     ) :null}
                                 </tr>
@@ -243,36 +246,45 @@ export default function Library({ setViewingMode, sessionStatus, setAddLanguage,
                                 <tr className="highlight">
                                     <td className="">You have 0 saved cards</td>
                                     <td className=""></td>
-                                    <td className=""></td>
-                                    <td className=""></td>
-                                    <td className=""></td>
-                                    <td className=""></td>
                                 </tr> :
                                 (filteredData && filteredData.map((card, i) => (
-                                    <tr key={"data-row" + i} className="highlight">
-                                        <td className="">{card.language}</td>
-                                        <td className="">{card.original}</td>
-                                        <td className="">{card.translation}</td>
-                                        <td className="">{!card?.phonetic ? "None" : card?.phonetic}</td>
-                                        <td className="">{!card?.context ? "None" : card?.context}</td>
-                                        <td onClick={() => handleImageClick(card?.image)} className="">{card?.image ? "Click to View" : "None"}</td>
-                                    </tr>
+                                    <TableRow card={card} index={i} setViewCard={setViewCard} />
                                 )))
                                 }
                                 </tbody>
                             </table>
                         </div>
                     </div>
-                    {image ? 
-                    <div className={`abs-centered window`}>
+                    {viewCard?.original ? 
+                    <div className={`abs-centered window w-52`}>
                         <div className="title-bar">
-                            <div className="title-bar-text">Image Preview</div>
+                            <div className="title-bar-text">Card Info</div>
                             <div className="title-bar-controls">
-                            <button onClick={() => setImage(undefined)} aria-label="Close"></button>
+                            <button onClick={() => setViewCard({})} aria-label="Close"></button>
                             </div>
                         </div>
-                        <div className="window-body">
-                            <img src={image} />
+                        <div className="window-body flex flex-col items-center">
+                            <p className="font-bold">Original</p>
+                            <p className="text-center">{viewCard?.original}</p>
+                            <p className="font-bold">Translation</p>
+                            <p className="text-center">{viewCard?.translation}</p>
+                            {viewCard?.context ? 
+                                <>
+                                    <p className="font-bold">Context</p>
+                                    <p className="text-center">{viewCard?.context}</p>
+                                </> : null
+                            }
+                            {viewCard?.phonetic ? 
+                                <>
+                                    <p className="font-bold">Phonetic</p>
+                                    <p className="text-center">{viewCard?.phonetic}</p>
+                                </> : null
+                            }
+                            {viewCard?.image ? 
+                                <>
+                                    {image ? <><img className="w-1/2 my-2" src={image} /><button className="min-w-10" onClick={() => setImage(undefined)}>close</button></> : <button className="mt-2" onClick={() => setImage(viewCard.image)}>View Image</button>}
+                                </> : null
+                            }
                         </div>
                     </div> : null}
                     <div className="status-bar">

@@ -9,7 +9,7 @@ export async function POST(request: NextRequest){
     const { language, collectionName, sandbox } = await request.json();
     await mongoDBConnection();
 
-    console.log("hello")
+    console.log("hello");
 
     console.log(language, collectionName, sandbox);
     const session = await getServerSession();
@@ -58,24 +58,30 @@ export async function POST(request: NextRequest){
 
         return NextResponse.json({ cards: cards }, { status: 200 });
     } else {
-        console.log("hello8")
-        const sortedCards = cards
-        .filter((card: any) => {
-            const nextReviewDate = new Date(card.updatedAt);
-            nextReviewDate.setDate(nextReviewDate.getDate() + card.superMemo.interval);
-            return nextReviewDate <= now; // include only due cards
-        })
-        .sort((a: any, b: any) => {
-            if (a.superMemo.interval !== b.superMemo.interval) {
-                return a.superMemo.interval - b.superMemo.interval; // shorter interval first
+        if (cards.length <= 0){ // if there are no cards in a given category
+            return NextResponse.json({ message: "No Cards"}, { status: 400})
+        } else {
+            const sortedCards = cards
+            .filter((card: any) => {
+                const nextReviewDate = new Date(card.updatedAt);
+                nextReviewDate.setDate(nextReviewDate.getDate() + card.superMemo.interval);
+                return nextReviewDate <= now; // include only due cards
+            })
+            .sort((a: any, b: any) => {
+                if (a.superMemo.interval !== b.superMemo.interval) {
+                    return a.superMemo.interval - b.superMemo.interval; // shorter interval first
+                }
+                if (a.superMemo.EF !== b.superMemo.EF) {
+                    return a.superMemo.EF - b.superMemo.EF; // lower EF (harder cards) first
+                }
+                return new Date(a.updatedAt).getTime() - new Date(b.updatedAt).getTime(); // older last review first
+            });
+            
+            if (sortedCards.length === 0) { // if there are no cards due
+                return NextResponse.json({ message: "No Cards Due" }, { status: 400 })
+            } else { // default behavior
+                return NextResponse.json({ cards: sortedCards}, { status: 200})
             }
-            if (a.superMemo.EF !== b.superMemo.EF) {
-                return a.superMemo.EF - b.superMemo.EF; // lower EF (harder cards) first
-            }
-            return new Date(a.updatedAt).getTime() - new Date(b.updatedAt).getTime(); // older last review first
-        });
-        console.log("hello9")
-        return NextResponse.json({ cards: sortedCards}, { status: 200})
+        }
     }
-
 }
