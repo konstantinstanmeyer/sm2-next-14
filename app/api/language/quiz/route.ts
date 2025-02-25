@@ -23,7 +23,6 @@ export async function POST(request: NextRequest){
 
     // change to let user."...".populate() be dependent on if there is a language or collectionName present
     const user: any = await User.findOne(filter)
-    .populate("cards")
     .populate("collections.cards")
     .lean();
 
@@ -39,8 +38,8 @@ export async function POST(request: NextRequest){
         }
         cards = collection.cards;
     } else if (language){
-        console.log("hello6")
-        cards = user.cards.filter((card: CardModel) => card.language === language);
+        const cardsByLanguage: any = await Card.find({ user: user._id, language: language });
+        cards = cardsByLanguage;
     }
 
     if (!cards.length) {
