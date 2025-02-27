@@ -183,48 +183,75 @@ export default function Library({ setViewingMode, sessionStatus, setAddLanguage,
     }
 
     return (
-        <div className={`window w-[80vw] relative z-10`}>
-            <p className="">Library</p>
-            <div className="title-bar-controls absolute top-1 right-1">
+        <div className={`window w-[85vw] md:max-h-fit md:min-h-[54.5vh] max-h-fit relative z-10`}>
+            {/* <p className="">Library</p> */}
+            {/* <div className="title-bar-controls absolute top-1 right-1">
                 <button onClick={() => setViewingMode("")} aria-label="Close"></button>
+            </div> */}
+            <div className="title-bar mb-2">
+                <div className="title-bar-text">A Title Bar</div>
+                <div className="title-bar-controls">
+                    <button onClick={() => setViewingMode("")} aria-label="Close"></button>
+                </div>
             </div>
-            <menu role="tablist">
+            {studyMode === "All Cards" ? 
+            <fieldset className="w-[99%] mx-auto mb-3">
+                <legend>Filter By</legend>
+                <div className="field-row">
+                    <p className="w-[3.8rem]">Language: </p>
+                    <select value={filter} className="w-24" onChange={(e: ChangeEvent<HTMLSelectElement>) => handleFilterChange(e.target.value === "All" ? undefined : e.target.value)}>
+                        <option>All</option>
+                        <option>Spanish</option>
+                        <option>Japanese</option>
+                        <option>Indonesian</option>
+                        <option>Italian</option>
+                        <option>French</option>
+                    </select>
+                </div>
+                <div className="field-row">
+                    <p className="w-[3.8rem]">Collection:</p>
+                    <select value={collectionFilter} disabled={loading && collectionsList.length <= 0 ? true : false} className="w-24" onChange={(e: ChangeEvent<HTMLSelectElement>) => setCollectionFilter(e.target.value === "Select" ? undefined : e.target.value)}>
+                        {loading && collectionsList.length <= 0 ? <option>Loading...</option> : <option>Select</option>}
+                        {collectionsList.map((collectionName, i) => {
+                            return <option key={"collection-" + i}>{collectionName}</option>
+                        })}
+                    </select>
+                </div>
+             </fieldset> :
+            <fieldset className="w-[99%] mx-auto mb-3">
+                <legend>Filter By</legend>
+                <div className="field-row">
+                    <p className="w-[3.8rem]">Language: </p>
+                    <select value={sampleFilter || "Select"} className="w-24" onChange={(e: ChangeEvent<HTMLSelectElement>) => setSampleFilter(e.target.value === "Select" ? undefined : e.target.value)}>
+                        <option>Select</option>
+                        <option>Spanish</option>
+                        <option>Japanese</option>
+                        <option>Indonesian</option>
+                        <option>Italian</option>
+                        <option>French</option>
+                    </select>
+                </div>
+                <div className="field-row">
+                    <p className="w-[3.8rem]"># of samples:</p>
+                    <select value={sampleLength} className="md:w-auto w-24" onChange={(e: ChangeEvent<HTMLSelectElement>) => setSampleLength(e.target.value)}>
+                        <option>20</option>
+                        <option>40</option>
+                        <option>60</option>
+                        <option>80</option>
+                        <option>100</option>
+                    </select>
+                </div>
+            </fieldset>
+            }
+            <menu className="!w-[99%] !mx-auto" role="tablist">
                 <li className="cursor-pointer" role="tab" onClick={() => setStudyMode("All Cards")} aria-selected={studyMode === "All Cards"}><a>All Cards</a></li>
                 <li className="cursor-pointer" role="tab" onClick={() => setStudyMode("View Samples")} aria-selected={studyMode === "View Samples"}><a>View Samples</a></li>
             </menu>
             {studyMode === "All Cards" ? 
             <>
-                <div className="absolute top-3 md:top-5 right-5 md:right-auto md:left-36">
-                    {/* <div className="flex md:flex-row flex-row items-center md:items-center">
-                        <div className="flex items-center justify-center md:flex-row flex-col mr-0 md:mr-4"> */}
-                    <div className="flex md:flex-row flex-row items-center md:items-center">
-                        <div className="flex items-center justify-center md:flex-row flex-col mr-0 md:mr-4">  
-                            <p className="md:block hidden mr-0 md:mr-2">Language:</p>
-                            <p className="block md:hidden md:text-base text-[0.6rem] md:mb-0 -mb-1 mr-0 md:mr-2">Lang.:</p>
-                            <select value={filter} className="md:scale-100 scale-[80%] md:w-fit w-16" onChange={(e: ChangeEvent<HTMLSelectElement>) => handleFilterChange(e.target.value === "All" ? undefined : e.target.value)}>
-                                <option>All</option>
-                                <option>Spanish</option>
-                                <option>Japanese</option>
-                                <option>Indonesian</option>
-                                <option>Italian</option>
-                                <option>French</option>
-                            </select>
-                        </div>
-                        <div className="flex items-center justify-center md:flex-row flex-col mr-0 md:mr-4">  
-                            <p className="md:block hidden mr-0 md:mr-2">Collection:</p>
-                            <p className="block md:hidden md:text-base text-[0.6rem] md:mb-0 -mb-1 mr-0 md:mr-2">Col.:</p>
-                            <select value={collectionFilter} className="md:scale-100 scale-[80%] md:w-fit w-14" onChange={(e: ChangeEvent<HTMLSelectElement>) => setCollectionFilter(e.target.value === "Select" ? undefined : e.target.value)}>
-                                <option>Select</option>
-                                {collectionsList.map((collectionName, i) => {
-                                    return <option key={"collection-" + i}>{collectionName}</option>
-                                })}
-                            </select>
-                        </div>
-                    </div>
-                </div>
-                <div className="window" role="tabpanel">
+                <div className="window relative mb-1.5 w-[99%] mx-auto" role="tabpanel">
                     <div className="window-body relative">
-                        <div className="sunken-panel table-height w-full relative">
+                        <div className="sunken-panel md:h-[27.5vh] h-[52.5vh] relative">
                             <table className="interactive w-full relative">
                                 <thead className="relative">
                                 <tr className="relative">
@@ -296,52 +323,9 @@ export default function Library({ setViewingMode, sessionStatus, setAddLanguage,
                 </div>
             </> : 
             <>
-                 <div className="absolute top-3 md:top-5 right-5 md:right-auto md:left-36">
-                    <div className="flex md:flex-row flex-row items-center md:items-center">
-                        <div className="flex items-center justify-center md:flex-row flex-col mr-0 md:mr-4">
-                            <p className="md:block hidden mr-0 md:mr-2">Language:</p>
-                            <p className="block md:hidden md:text-base text-[0.6rem] md:mb-0 -mb-1 mr-0 md:mr-2">Lang.</p>
-                            <select value={sampleFilter || "Select"} className="md:scale-100 scale-[80%] w-16  md:w-fit" onChange={(e: ChangeEvent<HTMLSelectElement>) => setSampleFilter(e.target.value === "Select" ? undefined : e.target.value)}>
-                                <option>Select</option>
-                                <option>Spanish</option>
-                                <option>Japanese</option>
-                                <option>Indonesian</option>
-                                <option>Italian</option>
-                                <option>French</option>
-                            </select>
-                        </div>
-                        {/* <div className="field-row p-0 mx-2">
-                            <input checked={sampleFilter === "Spanish"} onChange={() => handleCheckboxClick("Spanish")} type="checkbox" id="example6"/>
-                            <label htmlFor="example6">Spanish</label>
-                        </div>
-                        <div className="field-row !mt-0 p-0 mx-2">
-                            <input checked={sampleFilter === "Japanese"} onChange={() => handleCheckboxClick("Japanese")} type="checkbox" id="example7"/>
-                            <label htmlFor="example7">Japanese</label>
-                        </div>
-                        <div className="field-row !mt-0 mx-2 p-0">
-                            <input checked={sampleFilter === "Indonesian"} onChange={() => handleCheckboxClick("Indonesian")} type="checkbox" id="example8"/>
-                            <label htmlFor="example8">Indonesian</label>
-                        </div>
-                        <div className="field-row !mt-0 mx-2 p-0">
-                            <input checked={sampleFilter === "Italian"} onChange={() => handleCheckboxClick("Italian")} type="checkbox" id="example9"/>
-                            <label htmlFor="example9">Italian</label>
-                        </div> */}
-                        <div className="flex md:flex-row flex-col justify-center items-center">
-                            <p className="md:block hidden mr-0 md:mr-2"># of samples:&nbsp;</p>
-                            <p className="block md:hidden md:text-base text-[0.6rem] md:mb-0 -mb-1 mr-0 md:mr-2">Amount</p>
-                            <select value={sampleLength} className="md:w-auto w-14 md:scale-100 scale-[80%]" onChange={(e: ChangeEvent<HTMLSelectElement>) => setSampleLength(e.target.value)}>
-                                <option>20</option>
-                                <option>40</option>
-                                <option>60</option>
-                                <option>80</option>
-                                <option>100</option>
-                            </select>
-                        </div>
-                    </div>
-                </div>
-                <div className="window" role="tabpanel">
+                <div className="window relative mb-1.5 w-[99%] mx-auto" role="tabpanel">
                     <div className="window-body relative">
-                        <div className="sunken-panel table-height w-full relative">
+                        <div className="sunken-panel md:h-[27.5vh] h-[52.5vh] w-full relative">
                             <table className="interactive w-full relative">
                                 <thead className="relative w-full">
                                 <tr className="relative w-full">
@@ -414,6 +398,39 @@ function LoadingRows(){
                 <td className="w-1/6">Loading...</td>
             </tr>
             <tr className="w-full">
+                <td className="w-1/6">Loading...</td>
+            </tr>
+            <tr className="w-full md:hidden">
+                <td className="w-1/6">Loading...</td>
+            </tr>
+            <tr className="w-full md:hidden">
+                <td className="w-1/6">Loading...</td>
+            </tr>
+            <tr className="w-full md:hidden">
+                <td className="w-1/6">Loading...</td>
+            </tr>
+            <tr className="w-full md:hidden">
+                <td className="w-1/6">Loading...</td>
+            </tr>
+            <tr className="w-full md:hidden">
+                <td className="w-1/6">Loading...</td>
+            </tr>
+            <tr className="w-full md:hidden">
+                <td className="w-1/6">Loading...</td>
+            </tr>
+            <tr className="w-full md:hidden">
+                <td className="w-1/6">Loading...</td>
+            </tr>
+            <tr className="w-full md:hidden">
+                <td className="w-1/6">Loading...</td>
+            </tr>
+            <tr className="w-full md:hidden">
+                <td className="w-1/6">Loading...</td>
+            </tr>
+            <tr className="w-full md:hidden">
+                <td className="w-1/6">Loading...</td>
+            </tr>
+            <tr className="w-full md:hidden">
                 <td className="w-1/6">Loading...</td>
             </tr>
         </>

@@ -1,7 +1,7 @@
 "use client"
 
 import { useSession } from "next-auth/react";
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import Language from "./Language";
 import Landing from "./Landing";
 import Library from "./Library";

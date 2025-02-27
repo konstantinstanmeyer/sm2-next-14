@@ -82,6 +82,10 @@ textarea:focus {
     resize: none;
 }
 
+fieldset {
+  border-width: 2px;
+}
+
 .canvas-container {
   box-shadow: inset -1px -1px #fff, inset 1px 1px grey, inset -2px -2px #dfdfdf, inset 2px 2px #0a0a0a !important;
   width: 205px;
@@ -222,7 +226,7 @@ textarea:focus, input:focus, select:focus{
 }
 
 .table-height {
-  height: 200px;
+  height: auto;
 }
 
 @media (max-height: 400px) {
