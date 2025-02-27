@@ -112,9 +112,9 @@ export default function Quiz({ setViewingMode }: Props){
                 <p className="absolute top-8 left-2">#{cardIndex + 1}</p>
                 <div className="w-full relative flex flex-col items-center mt-8  mb-2">
                     <p className="font-bold">Original</p>
-                    <p className="mb-2">{cards[cardIndex].original}</p>
+                    <p className="mx-2 mb-2">{cards[cardIndex].original}</p>
                     <p className="font-bold">Translation</p>
-                    <p>{cards[cardIndex].translation}</p>
+                    <p className="mx-2">{cards[cardIndex].translation}</p>
                     {sandbox ? null : 
                     <>
                         <p className="font-bold mt-4 mb-2">Comprehension Level </p>
