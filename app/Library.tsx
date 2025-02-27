@@ -249,9 +249,9 @@ export default function Library({ setViewingMode, sessionStatus, setAddLanguage,
             </menu>
             {studyMode === "All Cards" ? 
             <>
-                <div className="window relative mb-1.5 w-[99%] mx-auto" role="tabpanel">
+                <div className="window relative mb-1 w-[99%] mx-auto" role="tabpanel">
                     <div className="window-body relative">
-                        <div className="sunken-panel md:h-[27.5vh] h-[52.5vh] relative">
+                        <div className="sunken-panel md:h-[27.5vh] h-[42.5vh] relative">
                             <table className="interactive w-full relative">
                                 <thead className="relative">
                                 <tr className="relative">
@@ -323,9 +323,9 @@ export default function Library({ setViewingMode, sessionStatus, setAddLanguage,
                 </div>
             </> : 
             <>
-                <div className="window relative mb-1.5 w-[99%] mx-auto" role="tabpanel">
+                <div className="window relative mb-1 w-[99%] mx-auto" role="tabpanel">
                     <div className="window-body relative">
-                        <div className="sunken-panel md:h-[27.5vh] h-[52.5vh] w-full relative">
+                        <div className="sunken-panel md:h-[27.5vh] h-[42.5vh] w-full relative">
                             <table className="interactive w-full relative">
                                 <thead className="relative w-full">
                                 <tr className="relative w-full">
